@@ -8,6 +8,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         welcome();
         System.out.println("Taxi Agency");
+        int choice;
+
+        choices:
         do {
             System.out.print("choose from below:\n" +
                     "1.Add a group of drivers  \n" +
@@ -15,8 +18,52 @@ public class Main {
                     "3.Driver signup or login  \n" +
                     "4.Passenger signup or login  \n" +
                     "5.Show ongoing travels  \n" +
-                    "6.Show a list of drivers 7.Show a list of passengers\n" +
+                    "6.Show a list of drivers \n" +
+                    "7.Show a list of passengers\n" +
+                    "8.exit\n" +
                     "your choice is: ");
+
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    printStar();
+                    break;
+
+                case 2:
+                    printStar();
+                    break;
+
+                case 3:
+                    printStar();
+                    break;
+
+                case 4:
+                    printStar();
+                    break;
+
+                case 5:
+                    printStar();
+                    break;
+
+                case 6:
+                    printStar();
+                    break;
+
+                case 7:
+                    printStar();
+                    break;
+
+                case 8:
+                    printStar();
+                    break choices;
+
+                default:
+                    printInvalidInput();
+                    printStar();
+                    break;
+
+            }
+
             break; //TODO
         } while (true);
     }
