@@ -14,8 +14,7 @@ public abstract class User {
     protected int age;
     protected boolean tripStatus;
 
-    public User(int id, String personalId, String firstName, String lastName, String gender, String phoneNumber, int birthYear) {
-        this.id = id;
+    public User(String personalId, String firstName, String lastName, String gender, String phoneNumber, int birthYear) {
         this.personalId = personalId;
         this.firstName = firstName;
         this.lastName = lastName;

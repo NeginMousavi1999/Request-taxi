@@ -4,6 +4,7 @@ package trip;
  * @author Negin Mousavi
  */
 public class Trip {
+    private int id;
     private int driverId;
     private int passengerId;
     private String origin;

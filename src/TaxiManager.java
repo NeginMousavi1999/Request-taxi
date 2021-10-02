@@ -37,7 +37,7 @@ public class TaxiManager {
             System.out.print("car id: ");
             int carId = scanner.nextInt();
             //TODO create car....
-            drivers[i] = new Driver(i + 1, personalId, fName, lName, gender, phoneNum, birthYear, carId);
+            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, carId);
             addedSuc += accessToDriversDB.addNewDriver(drivers[i]);
             drivers[i].setId(accessToDriversDB.getId("drivers", personalId));
             System.out.println("id: " + drivers[i].getId());
@@ -62,7 +62,7 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
             commonInformationInputs();
-            passengers[i] = new Passenger(0, personalId, fName, lName, gender, phoneNum, birthYear);
+            passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear);
             addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
             passengers[i].setId(accessPassengersDB.getId("passengers", personalId));
             System.out.println("id: " + passengers[i].getId());
