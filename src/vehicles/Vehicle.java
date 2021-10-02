@@ -3,7 +3,7 @@ package vehicles;
 /**
  * @author Negin Mousavi
  */
-public class Vehicle {
+public abstract class Vehicle {
     protected int id;
     protected String name;
     protected String color;
