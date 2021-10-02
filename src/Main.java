@@ -1,10 +1,14 @@
+import members.Driver;
+
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
  * @author Negin Mousavi
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        TaxiManager taxiManager = new TaxiManager();
         Scanner scanner = new Scanner(System.in);
         welcome();
         System.out.println("Taxi Agency");
@@ -22,14 +26,16 @@ public class Main {
                     "7.Show a list of passengers\n" +
                     "8.exit\n" +
                     "your choice is: ");
-
             choice = scanner.nextInt();
+
             switch (choice) {
                 case 1:
+                    taxiManager.createDriver(scanner, 1);
                     printStar();
                     break;
 
                 case 2:
+                    taxiManager.createPassenger(scanner, 2);
                     printStar();
                     break;
 
@@ -60,11 +66,8 @@ public class Main {
                 default:
                     printInvalidInput();
                     printStar();
-                    break;
-
             }
 
-            break; //TODO
         } while (true);
     }
 
