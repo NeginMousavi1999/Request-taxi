@@ -13,7 +13,6 @@ public class Main {
         welcome();
         int choice;
 
-        System.out.println(taxiManager.accessPassengersDB.getId("passengers", "0021899436"));
         choices:
         do {
             System.out.print("choose from below:\n" +
@@ -30,12 +29,12 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    taxiManager.createDriver(scanner, 1);
+                    taxiManager.createDriver(1);
                     printStar();
                     break;
 
                 case 2:
-                    taxiManager.createPassenger(scanner, 2);
+                    taxiManager.createPassenger(2);
                     printStar();
                     break;
 

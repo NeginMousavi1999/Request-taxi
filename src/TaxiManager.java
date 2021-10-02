@@ -1,5 +1,4 @@
 import accessToDB.AccessPassengersDB;
-import accessToDB.AccessToDB;
 import accessToDB.AccessToDriversDB;
 import members.Driver;
 import members.Passenger;
@@ -13,13 +12,15 @@ import java.util.Scanner;
 public class TaxiManager {
     AccessPassengersDB accessPassengersDB = new AccessPassengersDB();
     AccessToDriversDB accessToDriversDB = new AccessToDriversDB();
-    int indexOfPassengers = 0; //TODO
-    int indexOfDrivers = 0;
+    private String fName, lName, personalId, gender, phoneNum;
+    private int birthYear, carId;
+    Scanner scanner = new Scanner(System.in);
+
 
     public TaxiManager() throws SQLException, ClassNotFoundException {
     }
 
-    public void createDriver(Scanner scanner, int caseNum) throws SQLException {
+    public void createDriver(int caseNum) throws SQLException {
         int count = 0;
         int addedSuc = 0;
         if (caseNum == 3)
@@ -31,82 +32,65 @@ public class TaxiManager {
         Driver[] drivers = new Driver[count];
 
         for (int i = 0; i < count; i++) {
-            scanner.nextLine();
-            System.out.print("first name: ");
-            String fName = scanner.nextLine();
-
-            System.out.print("last name: ");
-            String lName = scanner.nextLine();
-
-            System.out.print("personal id: ");
-            String personalId = scanner.nextLine();
-
-            System.out.print("gender(f/m): ");
-            String gender = scanner.nextLine();
-
-            System.out.print("phone number: ");
-            String phoneNum = scanner.nextLine();
-
-            System.out.print("birth year: ");
-            int birthYear = scanner.nextInt();
-
+            System.out.println("** information for new driver **");
+            commonInformationInputs();
             System.out.print("car id: ");
-            int carId = scanner.nextInt(); //TODO create car....
-
+            int carId = scanner.nextInt();
+            //TODO create car....
             drivers[i] = new Driver(i + 1, personalId, fName, lName, gender, phoneNum, birthYear, carId);
-
             addedSuc += accessToDriversDB.addNewDriver(drivers[i]);
-            drivers[i].setId(accessToDriversDB.getId("drivers",personalId));
+            drivers[i].setId(accessToDriversDB.getId("drivers", personalId));
             System.out.println("id: " + drivers[i].getId());
         }
-        if (addedSuc == count) {
-            System.out.println(count + " new passenger(s) were added successfully");
-            indexOfPassengers += count;
-        } else
+        if (addedSuc == count)
+            System.out.println(count + " new driver(s) were added successfully");
+        else
             System.out.println("some thing were wrong...");
     }
 
-    public void createPassenger(Scanner scanner, int caseNum) throws SQLException {
+    public void createPassenger(int caseNum) throws SQLException {
         int count = 0;
         int addedSuc = 0;
         if (caseNum == 4) {
             count = 1;
-        }
-        else if (caseNum == 2) {
+        } else if (caseNum == 2) {
             System.out.print("Enter count of passengers you wanna add: ");
             count = scanner.nextInt();
         }
         Passenger[] passengers = new Passenger[count];
 
         for (int i = 0; i < count; i++) {
-            scanner.nextLine();
-            System.out.print("first name: ");
-            String fName = scanner.nextLine();
-
-            System.out.print("last name: ");
-            String lName = scanner.nextLine();
-
-            System.out.print("personal id: ");
-            String personalId = scanner.nextLine();
-
-            System.out.print("gender(f/m): ");
-            String gender = scanner.nextLine();
-
-            System.out.print("phone number: ");
-            String phoneNum = scanner.nextLine();
-
-            System.out.print("birth year: ");
-            int birthYear = scanner.nextInt();
-
+            System.out.println("** information for new passenger **");
+            commonInformationInputs();
             passengers[i] = new Passenger(0, personalId, fName, lName, gender, phoneNum, birthYear);
             addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
             passengers[i].setId(accessPassengersDB.getId("passengers", personalId));
             System.out.println("id: " + passengers[i].getId());
         }
-        if (addedSuc == count) {
+        if (addedSuc == count)
             System.out.println(count + " new passenger(s) were added successfully");
-            indexOfPassengers += count;
-        } else
+        else
             System.out.println("some thing were wrong...");
+    }
+
+    public void commonInformationInputs() {
+        scanner.nextLine();
+        System.out.print("first name: ");
+        fName = scanner.nextLine();
+
+        System.out.print("last name: ");
+        lName = scanner.nextLine();
+
+        System.out.print("personal id: ");
+        personalId = scanner.nextLine();
+
+        System.out.print("gender(f/m): ");
+        gender = scanner.nextLine();
+
+        System.out.print("phone number: ");
+        phoneNum = scanner.nextLine();
+
+        System.out.print("birth year: ");
+        birthYear = scanner.nextInt();
     }
 }

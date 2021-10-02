@@ -10,7 +10,7 @@ import java.sql.Statement;
 /**
  * @author Negin Mousavi
  */
-public class AccessPassengersDB extends AccessToDB{
+public class AccessPassengersDB extends AccessToDB {
     public AccessPassengersDB() throws ClassNotFoundException, SQLException {
     }
 
