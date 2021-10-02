@@ -9,4 +9,20 @@ public class Driver extends User{
         super(id, personalId, firstName, lastName, gender, phoneNumber, birthYear);
         this.carId = carId; //TODO add this car to cars --> nabayad vojud dashte bashe
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", personalId='" + personalId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthYear=" + birthYear +
+                ", age=" + age +
+                ", carId=" + carId +
+                ", tripStatus=" + tripStatus +
+                '}';
+    }
 }
