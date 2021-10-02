@@ -11,9 +11,9 @@ public class Main {
         TaxiManager taxiManager = new TaxiManager();
         Scanner scanner = new Scanner(System.in);
         welcome();
-        System.out.println("Taxi Agency");
         int choice;
 
+        System.out.println(taxiManager.accessPassengersDB.getId("passengers", "0021899436"));
         choices:
         do {
             System.out.print("choose from below:\n" +

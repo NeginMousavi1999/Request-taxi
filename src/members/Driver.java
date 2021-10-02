@@ -10,6 +10,10 @@ public class Driver extends User{
         this.carId = carId; //TODO add this car to cars --> nabayad vojud dashte bashe
     }
 
+    public int getCarId() {
+        return carId;
+    }
+
     @Override
     public String toString() {
         return "User{" +

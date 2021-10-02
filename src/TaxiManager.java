@@ -19,8 +19,9 @@ public class TaxiManager {
     public TaxiManager() throws SQLException, ClassNotFoundException {
     }
 
-    public void createDriver(Scanner scanner, int caseNum) {
+    public void createDriver(Scanner scanner, int caseNum) throws SQLException {
         int count = 0;
+        int addedSuc = 0;
         if (caseNum == 3)
             count = 1;
         else if (caseNum == 1) {
@@ -54,19 +55,28 @@ public class TaxiManager {
 
             drivers[i] = new Driver(i + 1, personalId, fName, lName, gender, phoneNum, birthYear, carId);
 
+            addedSuc += accessToDriversDB.addNewDriver(drivers[i]);
+            drivers[i].setId(accessToDriversDB.getId("drivers",personalId));
+            System.out.println("id: " + drivers[i].getId());
         }
+        if (addedSuc == count) {
+            System.out.println(count + " new passenger(s) were added successfully");
+            indexOfPassengers += count;
+        } else
+            System.out.println("some thing were wrong...");
     }
 
     public void createPassenger(Scanner scanner, int caseNum) throws SQLException {
         int count = 0;
-        if (caseNum == 4)
+        int addedSuc = 0;
+        if (caseNum == 4) {
             count = 1;
+        }
         else if (caseNum == 2) {
             System.out.print("Enter count of passengers you wanna add: ");
             count = scanner.nextInt();
         }
         Passenger[] passengers = new Passenger[count];
-        int addedSuc = 0;
 
         for (int i = 0; i < count; i++) {
             scanner.nextLine();
@@ -88,8 +98,10 @@ public class TaxiManager {
             System.out.print("birth year: ");
             int birthYear = scanner.nextInt();
 
+            passengers[i] = new Passenger(0, personalId, fName, lName, gender, phoneNum, birthYear);
             addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
-            passengers[i] = new Passenger(i + 1, personalId, fName, lName, gender, phoneNum, birthYear);
+            passengers[i].setId(accessPassengersDB.getId("passengers", personalId));
+            System.out.println("id: " + passengers[i].getId());
         }
         if (addedSuc == count) {
             System.out.println(count + " new passenger(s) were added successfully");
