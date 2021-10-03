@@ -1,8 +1,8 @@
 import accessToDB.AccessPassengersDB;
 import accessToDB.AccessToDriversDB;
 import enumeration.TypeOfVehicle;
-import members.Driver;
-import members.Passenger;
+import models.members.Driver;
+import models.members.Passenger;
 
 import java.sql.SQLException;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package members;
+package models.members;
 
 import enumeration.TypeOfVehicle;
 

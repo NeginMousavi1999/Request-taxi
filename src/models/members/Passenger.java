@@ -1,4 +1,4 @@
-package members;
+package models.members;
 
 /**
  * @author Negin Mousavi

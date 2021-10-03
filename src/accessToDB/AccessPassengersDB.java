@@ -1,11 +1,9 @@
 package accessToDB;
 
-import members.Passenger;
+import models.members.Passenger;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * @author Negin Mousavi

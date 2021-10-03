@@ -1,4 +1,4 @@
-package trip;
+package models.trip;
 
 /**
  * @author Negin Mousavi

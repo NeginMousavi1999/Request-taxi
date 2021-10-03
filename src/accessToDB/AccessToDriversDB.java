@@ -1,6 +1,6 @@
 package accessToDB;
 
-import members.Driver;
+import models.members.Driver;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
