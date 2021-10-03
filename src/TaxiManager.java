@@ -1,5 +1,6 @@
 import accessToDB.AccessPassengersDB;
 import accessToDB.AccessToDriversDB;
+import enumeration.TypeOfVehicle;
 import members.Driver;
 import members.Passenger;
 
@@ -33,11 +34,11 @@ public class TaxiManager {
 
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new driver **");
-            commonInformationInputs();
+            getCommonInformationInputs();
             System.out.print("car id: ");
-            int carId = scanner.nextInt();
+            carId = scanner.nextInt();
             //TODO create car....
-            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, carId);
+            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, TypeOfVehicle.CAR, carId);
             addedSuc += accessToDriversDB.addNewDriver(drivers[i]);
             drivers[i].setId(accessToDriversDB.getId("drivers", personalId));
             System.out.println("id: " + drivers[i].getId());
@@ -61,7 +62,7 @@ public class TaxiManager {
 
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
-            commonInformationInputs();
+            getCommonInformationInputs();
             passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear);
             addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
             passengers[i].setId(accessPassengersDB.getId("passengers", personalId));
@@ -73,7 +74,7 @@ public class TaxiManager {
             System.out.println("some thing were wrong...");
     }
 
-    public void commonInformationInputs() {
+    public void getCommonInformationInputs() {
         scanner.nextLine();
         System.out.print("first name: ");
         fName = scanner.nextLine();

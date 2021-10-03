@@ -1,18 +1,26 @@
 package members;
 
+import enumeration.TypeOfVehicle;
+
 /**
  * @author Negin Mousavi
  */
 public class Driver extends User {
-    private int carId;
+    private int vehicleId;
+    private TypeOfVehicle typeOfVehicle;//TODO
 
-    public Driver(String personalId, String firstName, String lastName, String gender, String phoneNumber, int birthYear, int carId) {
+    public Driver(String personalId, String firstName, String lastName, String gender, String phoneNumber, int birthYear, TypeOfVehicle typeOfVehicle, int vehicleId) {
         super(personalId, firstName, lastName, gender, phoneNumber, birthYear);
-        this.carId = carId; //TODO add this car to cars --> nabayad vojud dashte bashe
+        this.vehicleId = vehicleId; //TODO add this car to cars --> nabayad vojud dashte bashe
+        this.typeOfVehicle = typeOfVehicle;
     }
 
-    public int getCarId() {
-        return carId;
+    public int getVehicleId() {
+        return vehicleId;
+    }
+
+    public TypeOfVehicle getTypeOfVehicle() {
+        return typeOfVehicle;
     }
 
     @Override
@@ -26,7 +34,8 @@ public class Driver extends User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", birthYear=" + birthYear +
                 ", age=" + age +
-                ", carId=" + carId +
+                ", vehicleId=" + vehicleId +
+                ", typeOfVehicle=" + typeOfVehicle +
                 ", tripStatus=" + tripStatus +
                 '}';
     }
