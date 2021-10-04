@@ -119,4 +119,12 @@ public class TaxiManager {
         System.out.print("birth year: ");
         birthYear = scanner.nextInt();
     }
+
+    public void showAllPassengers() throws SQLException {
+        accessPassengersDB.showAllObjectsInDB();
+    }
+
+    public void showAllDrivers() throws SQLException {
+        accessToDriversDB.showAllObjectsInDB();
+    }
 }

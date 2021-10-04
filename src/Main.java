@@ -45,14 +45,17 @@ public class Main {
                     break;
 
                 case 5:
+                    System.out.println("this is not for this Project phase");
                     printStar();
                     break;
 
                 case 6:
+                    taxiManager.showAllDrivers();
                     printStar();
                     break;
 
                 case 7:
+                    taxiManager.showAllPassengers();
                     printStar();
                     break;
 

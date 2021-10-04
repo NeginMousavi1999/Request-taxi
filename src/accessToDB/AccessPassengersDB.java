@@ -3,7 +3,9 @@ package accessToDB;
 import models.members.Passenger;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @author Negin Mousavi
@@ -29,5 +31,20 @@ public class AccessPassengersDB extends AccessToDB {
                 return rowsInserted;
         }
         return 0;
+    }
+
+    @Override
+    public void showAllObjectsInDB() throws SQLException {
+        if (connection != null) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM passengers");
+            while (resultSet.next()) {
+                Passenger passenger = new Passenger(resultSet.getString(7), resultSet.getString(2),
+                        resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
+                        resultSet.getInt(4));
+                passenger.setId(resultSet.getInt(1));
+                System.out.println(passenger.toString());
+            }
+        }
     }
 }

@@ -41,4 +41,6 @@ public abstract class AccessToDB {
         }
         return false;
     }
+
+    public abstract void showAllObjectsInDB() throws SQLException;
 }

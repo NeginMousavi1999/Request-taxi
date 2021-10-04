@@ -13,6 +13,11 @@ public class AccessToVehicleDB extends AccessToDB {
     public AccessToVehicleDB() throws ClassNotFoundException, SQLException {
     }
 
+    @Override
+    public void showAllObjectsInDB() throws SQLException {
+        
+    }
+
     public int addNewDriver(Vehicle vehicle) throws SQLException {
         if (connection != null) {
             String sql = "INSERT INTO `taxi-agency`.`vehicles` (`type`, `name`, `color`, `plaque`) VALUES (?,?,?,?);";

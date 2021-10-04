@@ -1,16 +1,33 @@
 package accessToDB;
 
+import enumeration.TypeOfVehicle;
 import models.members.Driver;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @author Negin Mousavi
  */
 public class AccessToDriversDB extends AccessToDB {
     public AccessToDriversDB() throws ClassNotFoundException, SQLException {
+    }
+
+    @Override
+    public void showAllObjectsInDB() throws SQLException {
+        if (connection != null) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM drivers");
+            while (resultSet.next()) {
+                Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
+                        resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
+                        resultSet.getInt(4), TypeOfVehicle.CAR, resultSet.getInt(10));
+                driver.setId(resultSet.getInt(1));
+                System.out.println(driver.toString());
+            }
+        }
     }
 
     public int addNewDriver(Driver driver) throws SQLException {

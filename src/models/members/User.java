@@ -22,6 +22,7 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
         this.birthYear = birthYear;
         tripStatus = false;
+        age = 1400 - birthYear;
     }
 
     public void setId(int id) {
