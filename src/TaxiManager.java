@@ -88,7 +88,10 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
             getCommonInformationInputs();
-            passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear);
+            scanner.nextLine();
+            System.out.print("account balance: ");
+            double accountBalance = scanner.nextDouble();
+            passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear, accountBalance);
             addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
             passengers[i].setId(accessPassengersDB.getId("passengers","personal_id", personalId));
             System.out.println("id: " + passengers[i].getId());

@@ -17,7 +17,7 @@ public class AccessPassengersDB extends AccessToDB {
     public int addNewPassenger(Passenger passenger) throws SQLException {
         if (connection != null) {
             String sql = "INSERT INTO `taxi-agency`.`passengers` (`first_name`, `last_name`, `birth_year`, `gender`, `phone_number`," +
-                    " `personal_id`, `status`) VALUES (?,?,?,?,?,?,?);";
+                    " `personal_id`, `status`, `account_balance`) VALUES (?,?,?,?,?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, passenger.getFirstName());
             statement.setString(2, passenger.getLastName());
@@ -26,6 +26,7 @@ public class AccessPassengersDB extends AccessToDB {
             statement.setString(5, passenger.getPhoneNumber());
             statement.setString(6, passenger.getPersonalId());
             statement.setBoolean(7, passenger.isTripStatus());
+            statement.setDouble(8, passenger.getAccountBalance());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0)
                 return rowsInserted;
@@ -41,7 +42,7 @@ public class AccessPassengersDB extends AccessToDB {
             while (resultSet.next()) {
                 Passenger passenger = new Passenger(resultSet.getString(7), resultSet.getString(2),
                         resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
-                        resultSet.getInt(4));
+                        resultSet.getInt(4), resultSet.getDouble(9));
                 passenger.setId(resultSet.getInt(1));
                 System.out.println(passenger.toString());
             }
