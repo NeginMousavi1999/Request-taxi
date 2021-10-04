@@ -8,7 +8,7 @@ public abstract class User {
     protected String personalId;
     protected String firstName;
     protected String lastName;
-    protected String gender;
+    protected String gender;//enum
     protected String phoneNumber;
     protected int birthYear;
     protected int age;

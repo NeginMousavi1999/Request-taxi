@@ -3,6 +3,7 @@ package accessToDB;
 import models.members.Driver;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -24,7 +25,7 @@ public class AccessToDriversDB extends AccessToDB {
             statement.setString(5, driver.getPhoneNumber());
             statement.setString(6, driver.getPersonalId());
             statement.setBoolean(7, driver.isTripStatus());
-            statement.setString(8, String.valueOf(driver.getTypeOfVehicle()));
+            statement.setString(8, String.valueOf(driver.getTypeOfVehicle()).toLowerCase());
             statement.setInt(9, driver.getVehicleId());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0)
