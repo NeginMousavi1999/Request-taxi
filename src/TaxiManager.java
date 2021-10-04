@@ -14,12 +14,12 @@ import java.util.Scanner;
  * @author Negin Mousavi
  */
 public class TaxiManager {
+    Scanner scanner = new Scanner(System.in);
     AccessPassengersDB accessPassengersDB = new AccessPassengersDB();
     AccessToDriversDB accessToDriversDB = new AccessToDriversDB();
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
     private String fName, lName, personalId, gender, phoneNum;
     private int birthYear, vehicleId;
-    Scanner scanner = new Scanner(System.in);
 
 
     public TaxiManager() throws SQLException, ClassNotFoundException {
@@ -93,7 +93,7 @@ public class TaxiManager {
             double accountBalance = scanner.nextDouble();
             passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear, accountBalance);
             addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
-            passengers[i].setId(accessPassengersDB.getId("passengers","personal_id", personalId));
+            passengers[i].setId(accessPassengersDB.getId("passengers", "personal_id", personalId));
             System.out.println("id: " + passengers[i].getId());
         }
         if (addedSuc == count)
@@ -129,5 +129,43 @@ public class TaxiManager {
 
     public void showAllDrivers() throws SQLException {
         accessToDriversDB.showAllObjectsInDB();
+    }
+
+    public void signupOrLogin(int caseNum) throws SQLException {
+        System.out.println("enter your Personal Id");
+        String inputPersonalId = scanner.nextLine();
+        if (caseNum == 3) {
+            if (!accessToDriversDB.isUserExists("drivers", inputPersonalId))
+                registerOrExit("d");
+            else
+                System.out.println("you are authenticate");
+
+        } else if (caseNum == 4) {
+            if (accessPassengersDB.isUserExists("passengers", inputPersonalId))
+                registerOrExit("p");
+            else {
+
+
+            }
+        }
+    }
+
+
+
+    public void registerOrExit(String userType) throws SQLException {
+        System.out.println("1)register\n2)exit");
+        int answer = scanner.nextInt();
+        switch (answer) {
+            case 1:
+                if (userType.equals("p"))
+                    createPassenger(4);
+                else
+                    createDriver(3);
+                break;
+            case 2:
+                break;
+            default:
+                Main.printInvalidInput();
+        }
     }
 }

@@ -37,10 +37,12 @@ public class Main {
                     break;
 
                 case 3:
+                    taxiManager.signupOrLogin(3);
                     printStar();
                     break;
 
                 case 4:
+                    taxiManager.signupOrLogin(4);
                     printStar();
                     break;
 

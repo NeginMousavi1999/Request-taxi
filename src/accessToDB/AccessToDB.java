@@ -43,4 +43,17 @@ public abstract class AccessToDB {
     }
 
     public abstract void showAllObjectsInDB() throws SQLException;
+
+    public boolean isUserExists(String tableName, String personalId) throws SQLException {
+        if (connection != null) {
+            String sql = String.format("SELECT * FROM %s WHERE personal_id = ?;", tableName);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, personalId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
