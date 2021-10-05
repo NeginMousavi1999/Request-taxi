@@ -59,11 +59,11 @@ public class AccessToPassengersDB extends AccessToDB {
         return passenger;
     }
 
-        public void updateAccountBalance(double value, int id) throws SQLException {
+    public void updateAccountBalance(double value, int id) throws SQLException {
         if (connection != null) {
             String sql = String.format("UPDATE passengers SET account_balance='%s' WHERE id=%o", value, id);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.executeUpdate(sql);
         }
-        }
+    }
 }

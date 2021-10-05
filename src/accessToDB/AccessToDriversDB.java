@@ -2,7 +2,6 @@ package accessToDB;
 
 import enumeration.TypeOfVehicle;
 import models.members.Driver;
-import models.members.Passenger;
 import models.members.User;
 
 import java.sql.PreparedStatement;

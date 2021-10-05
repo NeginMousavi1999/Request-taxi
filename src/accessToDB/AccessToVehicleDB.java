@@ -1,6 +1,5 @@
 package accessToDB;
 
-import models.vehicles.Car;
 import models.vehicles.Vehicle;
 
 import java.sql.PreparedStatement;
@@ -15,7 +14,7 @@ public class AccessToVehicleDB extends AccessToDB {
 
     @Override
     public void showAllObjectsInDB() throws SQLException {
-        
+
     }
 
     public int addNewDriver(Vehicle vehicle) throws SQLException {
