@@ -11,6 +11,7 @@ import models.vehicles.Vehicle;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * @author Negin Mousavi
@@ -45,8 +46,20 @@ public class TaxiManager {
                 return;
             }
             scanner.nextLine();
-            System.out.print("vehicle plaque: ");
-            String vehiclePlaque = scanner.nextLine();
+
+            String vehiclePlaque = null;
+            while (true) {
+                try {
+                    System.out.print("vehicle plaque: ");
+                    vehiclePlaque = scanner.nextLine();
+                    isPlaqueCorrect(vehiclePlaque);
+                    break;
+                } catch (Exception e) {
+                    System.out.println(e.getLocalizedMessage());
+                    Thread.sleep(1000);
+                }
+            }
+
             if (isCarExists(vehiclePlaque)) {
                 System.out.println("you can choose this vehicle plaque because it is exits already...");
                 return;
@@ -122,7 +135,7 @@ public class TaxiManager {
         System.out.print("personal id: ");
         personalId = scanner.nextLine();
 
-        do {
+        while (true) {
             try {
                 System.out.print("gender(f/m): ");
                 gender = scanner.nextLine();
@@ -131,15 +144,23 @@ public class TaxiManager {
                 break;
             } catch (UserInputValidation e) {
                 System.out.println(e.getLocalizedMessage());
-                e.printStackTrace();
                 Thread.sleep(1000);
             }
-        } while (true);
+        }
 
-        System.out.print("phone number: ");
-        phoneNum = scanner.nextLine();
+        while (true) {
+            try {
+                System.out.print("phone number: ");
+                phoneNum = scanner.nextLine();
+                isMobileNumCorrect(phoneNum);
+                break;
+            } catch (UserInputValidation e) {
+                System.out.println(e.getLocalizedMessage());
+                Thread.sleep(1000);
+            }
+        }
 
-        do {
+        while (true) {
             System.out.print("birth year: ");
             if (scanner.hasNextInt()) {
                 birthYear = scanner.nextInt();
@@ -147,8 +168,9 @@ public class TaxiManager {
             } else {
                 scanner.nextLine();
                 System.out.println("Enter a valid Integer value");
+                Thread.sleep(1000);
             }
-        } while (true);
+        }
     }
 
     public void showAllPassengers() throws SQLException {
@@ -212,5 +234,17 @@ public class TaxiManager {
             default:
                 Main.printInvalidInput();
         }
+    }
+
+    public static void isMobileNumCorrect(String input) {
+        String regex = "09[0-9]{9}";
+        if (!Pattern.matches(regex, input))
+            throw new UserInputValidation("some thing is not correct about this phone number");
+    }
+
+    public static void isPlaqueCorrect(String input) {
+        String regex = "[0-9][0-9][a-z][0-9][0-9]";
+        if (!Pattern.matches(regex, input))
+            throw new UserInputValidation("the format of plauqe must be like: 99x99");
     }
 }
