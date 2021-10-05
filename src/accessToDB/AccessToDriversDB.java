@@ -22,13 +22,19 @@ public class AccessToDriversDB extends AccessToDB {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM drivers");
             while (resultSet.next()) {
-                Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
-                        resultSet.getInt(4), TypeOfVehicle.CAR, resultSet.getInt(10));
-                driver.setId(resultSet.getInt(1));
+                User driver = createUser(resultSet);
                 System.out.println(driver.toString());
             }
         }
+    }
+
+    @Override
+    public User createUser(ResultSet resultSet) throws SQLException {
+        Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
+                resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
+                resultSet.getInt(4), TypeOfVehicle.CAR, resultSet.getInt(10));
+        driver.setId(resultSet.getInt(1));
+        return driver;
     }
 
     public int addNewDriver(Driver driver) throws SQLException {
@@ -50,14 +56,5 @@ public class AccessToDriversDB extends AccessToDB {
                 return rowsInserted;
         }
         return 0;
-    }
-
-    @Override
-    public User createUser(ResultSet resultSet) throws SQLException {
-        Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
-                resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
-                resultSet.getInt(4), TypeOfVehicle.CAR, resultSet.getInt(10));
-        driver.setId(resultSet.getInt(1));
-        return driver;
     }
 }

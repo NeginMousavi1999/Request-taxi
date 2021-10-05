@@ -29,7 +29,7 @@ public abstract class AccessToDB {
         return id;
     }
 
-    public boolean objectIsFound(String tableName, String columnName, String value) throws SQLException {
+    public boolean isObjectFound(String tableName, String columnName, String value) throws SQLException {
         if (connection != null) {
             String sql = String.format("SELECT * FROM %s WHERE %s = ?;", tableName, columnName);
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -44,7 +44,7 @@ public abstract class AccessToDB {
 
     public abstract void showAllObjectsInDB() throws SQLException;
 
-    public User ReturnUserIfExists(String tableName, String personalId) throws SQLException {
+    public User returnUserIfExists(String tableName, String personalId) throws SQLException {
         if (connection != null) {
             String sql = String.format("SELECT * FROM %s WHERE personal_id = ?;", tableName);
             PreparedStatement statement = connection.prepareStatement(sql);

@@ -19,18 +19,6 @@ public abstract class Vehicle {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setPlaque(String plaque) {
-        this.plaque = plaque;
-    }
-
     public int getId() {
         return id;
     }

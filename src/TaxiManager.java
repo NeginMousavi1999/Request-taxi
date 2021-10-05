@@ -41,7 +41,7 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new driver **");
             getCommonInformationInputs();
-            if (accessToDriversDB.objectIsFound("drivers", "personal_id", personalId)) {
+            if (accessToDriversDB.isObjectFound("drivers", "personal_id", personalId)) {
                 System.out.println("you can't register, there is a driver with this personal id!");
                 return;
             }
@@ -52,7 +52,7 @@ public class TaxiManager {
                 try {
                     System.out.print("vehicle plaque: ");
                     vehiclePlaque = scanner.nextLine();
-                    isPlaqueCorrect(vehiclePlaque);
+                    handleExceptionForPlaqueFormat(vehiclePlaque);
                     break;
                 } catch (Exception e) {
                     System.out.println(e.getLocalizedMessage());
@@ -60,7 +60,7 @@ public class TaxiManager {
                 }
             }
 
-            if (isCarExists(vehiclePlaque)) {
+            if (isVehiclePlaqueExists(vehiclePlaque)) {
                 System.out.println("you can choose this vehicle plaque because it is exits already...");
                 return;
             } else {
@@ -88,8 +88,8 @@ public class TaxiManager {
         return vehicle.getId();
     }
 
-    private boolean isCarExists(String vehiclePlaque) throws SQLException {
-        return accessToDriversDB.objectIsFound("vehicles", "plaque", vehiclePlaque);
+    private boolean isVehiclePlaqueExists(String vehiclePlaque) throws SQLException {
+        return accessToDriversDB.isObjectFound("vehicles", "plaque", vehiclePlaque);
     }
 
     public void createPassenger(int caseNum) throws SQLException, InterruptedException {
@@ -106,7 +106,7 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
             getCommonInformationInputs();
-            if (accessToPassengersDB.objectIsFound("passengers", "personal_id", personalId)) {
+            if (accessToPassengersDB.isObjectFound("passengers", "personal_id", personalId)) {
                 System.out.println("you can't register, there is a driver with this personal id!");
                 return;
             }
@@ -152,7 +152,7 @@ public class TaxiManager {
             try {
                 System.out.print("phone number: ");
                 phoneNum = scanner.nextLine();
-                isMobileNumCorrect(phoneNum);
+                handleExceptionForMobileNumFormat(phoneNum);
                 break;
             } catch (UserInputValidation e) {
                 System.out.println(e.getLocalizedMessage());
@@ -173,6 +173,18 @@ public class TaxiManager {
         }
     }
 
+    public static void handleExceptionForMobileNumFormat(String input) {
+        String regex = "09[0-9]{9}";
+        if (!Pattern.matches(regex, input))
+            throw new UserInputValidation("some thing is not correct about this phone number");
+    }
+
+    public static void handleExceptionForPlaqueFormat(String input) {
+        String regex = "[0-9][0-9][a-z][0-9][0-9]";
+        if (!Pattern.matches(regex, input))
+            throw new UserInputValidation("the format of plauqe must be like: 99x99");
+    }
+
     public void showAllPassengers() throws SQLException {
         accessToPassengersDB.showAllObjectsInDB();
     }
@@ -185,14 +197,14 @@ public class TaxiManager {
         System.out.print("enter your Personal Id: ");
         String inputPersonalId = scanner.nextLine();
         if (caseNum == 3) {
-            User driver = accessToDriversDB.ReturnUserIfExists("drivers", inputPersonalId);
+            User driver = accessToDriversDB.returnUserIfExists("drivers", inputPersonalId);
             if (driver == null)
                 registerOrExit("d");
             else
                 System.out.println("you are authenticate");
 
         } else if (caseNum == 4) {
-            User passenger = accessToPassengersDB.ReturnUserIfExists("passengers", inputPersonalId);
+            User passenger = accessToPassengersDB.returnUserIfExists("passengers", inputPersonalId);
             if (passenger == null)
                 registerOrExit("p");
             else {
@@ -200,23 +212,6 @@ public class TaxiManager {
             }
         }
         scanner.nextLine();
-    }
-
-    public void showPassengerLoginMenu(Passenger passenger) throws SQLException {
-        System.out.print("you are authenticate\n1)Increase account balance\n2)Exit\nwhat do you wanna do? : ");
-        int answer = scanner.nextInt();
-        switch (answer) {
-            case 1:
-                System.out.print("enter amount to increase: ");
-                double amount = scanner.nextDouble();
-                double newAccountBalance = passenger.increaseAccountBalance(amount);
-                accessToPassengersDB.updateAccountBalance(newAccountBalance, passenger.getId());
-                break;
-            case 2:
-                break;
-            default:
-                Main.printInvalidInput();
-        }
     }
 
     public void registerOrExit(String userType) throws SQLException, InterruptedException {
@@ -236,15 +231,20 @@ public class TaxiManager {
         }
     }
 
-    public static void isMobileNumCorrect(String input) {
-        String regex = "09[0-9]{9}";
-        if (!Pattern.matches(regex, input))
-            throw new UserInputValidation("some thing is not correct about this phone number");
-    }
-
-    public static void isPlaqueCorrect(String input) {
-        String regex = "[0-9][0-9][a-z][0-9][0-9]";
-        if (!Pattern.matches(regex, input))
-            throw new UserInputValidation("the format of plauqe must be like: 99x99");
+    public void showPassengerLoginMenu(Passenger passenger) throws SQLException {
+        System.out.print("you are authenticate\n1)Increase account balance\n2)Exit\nwhat do you wanna do? : ");
+        int answer = scanner.nextInt();
+        switch (answer) {
+            case 1:
+                System.out.print("enter amount to increase: ");
+                double amount = scanner.nextDouble();
+                double newAccountBalance = passenger.increaseAccountBalance(amount);
+                accessToPassengersDB.updateAccountBalance(newAccountBalance, passenger.getId());
+                break;
+            case 2:
+                break;
+            default:
+                Main.printInvalidInput();
+        }
     }
 }

@@ -7,11 +7,11 @@ import enumeration.TypeOfVehicle;
  */
 public class Driver extends User {
     private int vehicleId;
-    private TypeOfVehicle typeOfVehicle;//TODO
+    private TypeOfVehicle typeOfVehicle;
 
     public Driver(String personalId, String firstName, String lastName, String gender, String phoneNumber, int birthYear, TypeOfVehicle typeOfVehicle, int vehicleId) {
         super(personalId, firstName, lastName, gender, phoneNumber, birthYear);
-        this.vehicleId = vehicleId; //TODO add this car to cars --> nabayad vojud dashte bashe
+        this.vehicleId = vehicleId;
         this.typeOfVehicle = typeOfVehicle;
     }
 

@@ -41,10 +41,7 @@ public class AccessToPassengersDB extends AccessToDB {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM passengers");
             while (resultSet.next()) {
-                Passenger passenger = new Passenger(resultSet.getString(7), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
-                        resultSet.getInt(4), resultSet.getDouble(9));
-                passenger.setId(resultSet.getInt(1));
+                User passenger = createUser(resultSet);
                 System.out.println(passenger.toString());
             }
         }
