@@ -15,6 +15,10 @@ public class Passenger extends User {
         return accountBalance;
     }
 
+    public double increaseAccountBalance(double amount) {
+        return accountBalance += amount;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -31,4 +35,3 @@ public class Passenger extends User {
                 '}';
     }
 }
-

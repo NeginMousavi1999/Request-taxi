@@ -1,9 +1,10 @@
-import accessToDB.AccessPassengersDB;
+import accessToDB.AccessToPassengersDB;
 import accessToDB.AccessToDriversDB;
 import accessToDB.AccessToVehicleDB;
 import enumeration.TypeOfVehicle;
 import models.members.Driver;
 import models.members.Passenger;
+import models.members.User;
 import models.vehicles.Car;
 import models.vehicles.Vehicle;
 
@@ -15,12 +16,11 @@ import java.util.Scanner;
  */
 public class TaxiManager {
     Scanner scanner = new Scanner(System.in);
-    AccessPassengersDB accessPassengersDB = new AccessPassengersDB();
+    AccessToPassengersDB accessToPassengersDB = new AccessToPassengersDB();
     AccessToDriversDB accessToDriversDB = new AccessToDriversDB();
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
     private String fName, lName, personalId, gender, phoneNum;
     private int birthYear, vehicleId;
-
 
     public TaxiManager() throws SQLException, ClassNotFoundException {
     }
@@ -39,6 +39,10 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new driver **");
             getCommonInformationInputs();
+            if (accessToDriversDB.objectIsFound("drivers", "personal_id", personalId)) {
+                System.out.println("you can't register, there is a driver with this personal id!");
+                return;
+            }
             scanner.nextLine();
             System.out.print("vehicle plaque: ");
             String vehiclePlaque = scanner.nextLine();
@@ -71,7 +75,7 @@ public class TaxiManager {
     }
 
     private boolean isCarExists(String vehiclePlaque) throws SQLException {
-        return accessToDriversDB.objectIsFound("plaque", "vehicles", vehiclePlaque);
+        return accessToDriversDB.objectIsFound("vehicles", "plaque", vehiclePlaque);
     }
 
     public void createPassenger(int caseNum) throws SQLException {
@@ -88,12 +92,16 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
             getCommonInformationInputs();
+            if (accessToPassengersDB.objectIsFound("passengers", "personal_id", personalId)) {
+                System.out.println("you can't register, there is a driver with this personal id!");
+                return;
+            }
             scanner.nextLine();
             System.out.print("account balance: ");
             double accountBalance = scanner.nextDouble();
             passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear, accountBalance);
-            addedSuc += accessPassengersDB.addNewPassenger(passengers[i]);
-            passengers[i].setId(accessPassengersDB.getId("passengers", "personal_id", personalId));
+            addedSuc += accessToPassengersDB.addNewPassenger(passengers[i]);
+            passengers[i].setId(accessToPassengersDB.getId("passengers", "personal_id", personalId));
             System.out.println("id: " + passengers[i].getId());
         }
         if (addedSuc == count)
@@ -124,7 +132,7 @@ public class TaxiManager {
     }
 
     public void showAllPassengers() throws SQLException {
-        accessPassengersDB.showAllObjectsInDB();
+        accessToPassengersDB.showAllObjectsInDB();
     }
 
     public void showAllDrivers() throws SQLException {
@@ -132,28 +140,45 @@ public class TaxiManager {
     }
 
     public void signupOrLogin(int caseNum) throws SQLException {
-        System.out.println("enter your Personal Id");
+        System.out.print("enter your Personal Id: ");
         String inputPersonalId = scanner.nextLine();
         if (caseNum == 3) {
-            if (!accessToDriversDB.isUserExists("drivers", inputPersonalId))
+            User driver = accessToDriversDB.ReturnUserIfExists("drivers", inputPersonalId);
+            if (driver == null)
                 registerOrExit("d");
             else
                 System.out.println("you are authenticate");
 
         } else if (caseNum == 4) {
-            if (accessPassengersDB.isUserExists("passengers", inputPersonalId))
+            User passenger = accessToPassengersDB.ReturnUserIfExists("passengers", inputPersonalId);
+            if (passenger == null)
                 registerOrExit("p");
             else {
-
-
+                showPassengerLoginMenu((Passenger) passenger);
             }
+        }
+        scanner.nextLine();
+    }
+
+    public void showPassengerLoginMenu(Passenger passenger) throws SQLException {
+        System.out.print("you are authenticate\n1)Increase account balance\n2)Exit\nwhat do you wanna do? : ");
+        int answer = scanner.nextInt();
+        switch (answer) {
+            case 1:
+                System.out.print("enter amount to increase: ");
+                double amount = scanner.nextDouble();
+                double newAccountBalance = passenger.increaseAccountBalance(amount);
+                accessToPassengersDB.updateAccountBalance(newAccountBalance, passenger.getId());
+                break;
+            case 2:
+                break;
+            default:
+                Main.printInvalidInput();
         }
     }
 
-
-
     public void registerOrExit(String userType) throws SQLException {
-        System.out.println("1)register\n2)exit");
+        System.out.print("1)register\n2)exit\nwhat do you wanna do? : ");
         int answer = scanner.nextInt();
         switch (answer) {
             case 1:

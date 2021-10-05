@@ -1,6 +1,7 @@
 package accessToDB;
 
 import models.members.Passenger;
+import models.members.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,8 +11,8 @@ import java.sql.Statement;
 /**
  * @author Negin Mousavi
  */
-public class AccessPassengersDB extends AccessToDB {
-    public AccessPassengersDB() throws ClassNotFoundException, SQLException {
+public class AccessToPassengersDB extends AccessToDB {
+    public AccessToPassengersDB() throws ClassNotFoundException, SQLException {
     }
 
     public int addNewPassenger(Passenger passenger) throws SQLException {
@@ -48,4 +49,21 @@ public class AccessPassengersDB extends AccessToDB {
             }
         }
     }
+
+    @Override
+    public User createUser(ResultSet resultSet) throws SQLException {
+        Passenger passenger = new Passenger(resultSet.getString(7), resultSet.getString(2),
+                resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
+                resultSet.getInt(4), resultSet.getDouble(9));
+        passenger.setId(resultSet.getInt(1));
+        return passenger;
+    }
+
+        public void updateAccountBalance(double value, int id) throws SQLException {
+        if (connection != null) {
+            String sql = String.format("UPDATE passengers SET account_balance='%s' WHERE id=%o", value, id);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.executeUpdate(sql);
+        }
+        }
 }

@@ -1,6 +1,6 @@
 package accessToDB;
 
-import models.members.Driver;
+import models.members.User;
 
 import java.sql.*;
 
@@ -29,9 +29,9 @@ public abstract class AccessToDB {
         return id;
     }
 
-    public boolean objectIsFound(String columnName, String tableName, String value) throws SQLException {
+    public boolean objectIsFound(String tableName, String columnName, String value) throws SQLException {
         if (connection != null) {
-            String sql = String.format("SELECT %s FROM %s WHERE plaque = ?;", columnName, tableName);
+            String sql = String.format("SELECT * FROM %s WHERE %s = ?;", tableName, columnName);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, value);
             ResultSet resultSet = statement.executeQuery();
@@ -44,16 +44,20 @@ public abstract class AccessToDB {
 
     public abstract void showAllObjectsInDB() throws SQLException;
 
-    public boolean isUserExists(String tableName, String personalId) throws SQLException {
+    public User ReturnUserIfExists(String tableName, String personalId) throws SQLException {
         if (connection != null) {
             String sql = String.format("SELECT * FROM %s WHERE personal_id = ?;", tableName);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, personalId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return true;
+                return createUser(resultSet);
             }
         }
-        return false;
+        return null;
+    }
+
+    public User createUser(ResultSet resultSet) throws SQLException {
+        return null;
     }
 }

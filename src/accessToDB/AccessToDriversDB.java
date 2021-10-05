@@ -2,6 +2,8 @@ package accessToDB;
 
 import enumeration.TypeOfVehicle;
 import models.members.Driver;
+import models.members.Passenger;
+import models.members.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,5 +51,14 @@ public class AccessToDriversDB extends AccessToDB {
                 return rowsInserted;
         }
         return 0;
+    }
+
+    @Override
+    public User createUser(ResultSet resultSet) throws SQLException {
+        Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
+                resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
+                resultSet.getInt(4), TypeOfVehicle.CAR, resultSet.getInt(10));
+        driver.setId(resultSet.getInt(1));
+        return driver;
     }
 }
