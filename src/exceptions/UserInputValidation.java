@@ -4,7 +4,7 @@ package exceptions;
  * @author Negin Mousavi
  */
 public class UserInputValidation extends RuntimeException {
-    private String message;
+    private final String message;
 
     public UserInputValidation(String message) {
         super(message);
