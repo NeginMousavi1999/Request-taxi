@@ -2,6 +2,7 @@ import accessToDB.AccessToDriversDB;
 import accessToDB.AccessToPassengersDB;
 import accessToDB.AccessToVehicleDB;
 import enumeration.TypeOfVehicle;
+import exceptions.UserInputValidation;
 import models.members.Driver;
 import models.members.Passenger;
 import models.members.User;
@@ -25,7 +26,7 @@ public class TaxiManager {
     public TaxiManager() throws SQLException, ClassNotFoundException {
     }
 
-    public void createDriver(int caseNum) throws SQLException {
+    public void createDriver(int caseNum) throws SQLException, InterruptedException {
         int count = 0;
         int addedSuc = 0;
         if (caseNum == 3)
@@ -78,7 +79,7 @@ public class TaxiManager {
         return accessToDriversDB.objectIsFound("vehicles", "plaque", vehiclePlaque);
     }
 
-    public void createPassenger(int caseNum) throws SQLException {
+    public void createPassenger(int caseNum) throws SQLException, InterruptedException {
         int count = 0;
         int addedSuc = 0;
         if (caseNum == 4) {
@@ -110,7 +111,7 @@ public class TaxiManager {
             System.out.println("some thing were wrong...");
     }
 
-    public void getCommonInformationInputs() {
+    public void getCommonInformationInputs() throws InterruptedException {
         scanner.nextLine();
         System.out.print("first name: ");
         fName = scanner.nextLine();
@@ -121,14 +122,33 @@ public class TaxiManager {
         System.out.print("personal id: ");
         personalId = scanner.nextLine();
 
-        System.out.print("gender(f/m): ");
-        gender = scanner.nextLine();
+        do {
+            try {
+                System.out.print("gender(f/m): ");
+                gender = scanner.nextLine();
+                if (!gender.equals("m") && !gender.equals("f"))
+                    throw new UserInputValidation("you must enter f or m...");
+                break;
+            } catch (UserInputValidation e) {
+                System.out.println(e.getLocalizedMessage());
+                e.printStackTrace();
+                Thread.sleep(1000);
+            }
+        } while (true);
 
         System.out.print("phone number: ");
         phoneNum = scanner.nextLine();
 
-        System.out.print("birth year: ");
-        birthYear = scanner.nextInt();
+        do {
+            System.out.print("birth year: ");
+            if (scanner.hasNextInt()) {
+                birthYear = scanner.nextInt();
+                break;
+            } else {
+                scanner.nextLine();
+                System.out.println("Enter a valid Integer value");
+            }
+        } while (true);
     }
 
     public void showAllPassengers() throws SQLException {
@@ -139,7 +159,7 @@ public class TaxiManager {
         accessToDriversDB.showAllObjectsInDB();
     }
 
-    public void signupOrLogin(int caseNum) throws SQLException {
+    public void signupOrLogin(int caseNum) throws SQLException, InterruptedException {
         System.out.print("enter your Personal Id: ");
         String inputPersonalId = scanner.nextLine();
         if (caseNum == 3) {
@@ -177,7 +197,7 @@ public class TaxiManager {
         }
     }
 
-    public void registerOrExit(String userType) throws SQLException {
+    public void registerOrExit(String userType) throws SQLException, InterruptedException {
         System.out.print("1)register\n2)exit\nwhat do you wanna do? : ");
         int answer = scanner.nextInt();
         switch (answer) {

@@ -10,7 +10,6 @@ public abstract class Vehicle {
     protected String plaque;
 
     public Vehicle(String name, String color, String plaque) {
-        this.id = id;
         this.name = name;
         this.color = color;
         this.plaque = plaque;
