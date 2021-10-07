@@ -1,8 +1,11 @@
 package models.vehicles;
 
+import lombok.Data;
+
 /**
  * @author Negin Mousavi
  */
+@Data
 public abstract class Vehicle {
     protected int id;
     protected String name;
@@ -13,26 +16,6 @@ public abstract class Vehicle {
         this.name = name;
         this.color = color;
         this.plaque = plaque;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public String getPlaque() {
-        return plaque;
     }
 
     @Override

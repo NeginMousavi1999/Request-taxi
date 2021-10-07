@@ -1,8 +1,12 @@
 package models.trip;
 
+import lombok.Data;
+
 /**
  * @author Negin Mousavi
  */
+
+@Data
 public class Trip {
     private int id;
     private int driverId;

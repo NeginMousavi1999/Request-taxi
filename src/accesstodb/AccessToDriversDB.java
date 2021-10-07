@@ -1,4 +1,4 @@
-package accessToDB;
+package accesstodb;
 
 import enumeration.TypeOfVehicle;
 import models.members.Driver;

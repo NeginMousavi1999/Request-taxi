@@ -1,6 +1,6 @@
-import accessToDB.AccessToDriversDB;
-import accessToDB.AccessToPassengersDB;
-import accessToDB.AccessToVehicleDB;
+import accesstodb.AccessToDriversDB;
+import accesstodb.AccessToPassengersDB;
+import accesstodb.AccessToVehicleDB;
 import enumeration.TypeOfVehicle;
 import exceptions.UserInputValidation;
 import models.members.Driver;

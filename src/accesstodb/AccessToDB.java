@@ -1,4 +1,4 @@
-package accessToDB;
+package accesstodb;
 
 import models.members.User;
 
