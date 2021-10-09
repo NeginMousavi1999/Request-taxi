@@ -1,12 +1,12 @@
 import accesstodb.AccessToDriversDB;
 import accesstodb.AccessToPassengersDB;
 import accesstodb.AccessToVehicleDB;
+import enumeration.Gender;
 import enumeration.TypeOfVehicle;
 import exceptions.UserInputValidation;
 import models.members.Driver;
 import models.members.Passenger;
 import models.members.User;
-import models.vehicles.Car;
 import models.vehicles.Vehicle;
 
 import java.sql.SQLException;
@@ -21,8 +21,9 @@ public class TaxiManager {
     AccessToPassengersDB accessToPassengersDB = new AccessToPassengersDB();
     AccessToDriversDB accessToDriversDB = new AccessToDriversDB();
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
-    private String fName, lName, personalId, gender, phoneNum;
+    private String fName, lName, personalId, phoneNum;
     private int birthYear, vehicleId;
+    Gender gender;
 
     public TaxiManager() throws SQLException, ClassNotFoundException {
     }
@@ -60,17 +61,22 @@ public class TaxiManager {
                 }
             }
 
+            TypeOfVehicle typeOfVehicle;
             if (isVehiclePlaqueExists(vehiclePlaque)) {
                 System.out.println("you can choose this vehicle plaque because it is exits already...");
                 return;
             } else {
+                do {
+                    typeOfVehicle = chooseTypeOfVehicle();
+                } while (typeOfVehicle == null);
+                scanner.nextLine();
                 System.out.print("vehicle name: ");
                 String name = scanner.nextLine();
                 System.out.print("vehicle color: ");
                 String color = scanner.nextLine();
-                vehicleId = createVehicleAndReturnId(name, color, vehiclePlaque);
+                vehicleId = createVehicleAndReturnId(name, color, vehiclePlaque, typeOfVehicle);
             }
-            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, TypeOfVehicle.CAR, vehicleId);
+            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, typeOfVehicle, vehicleId);
             addedSuc += accessToDriversDB.addNewDriver(drivers[i]);
             drivers[i].setId(accessToDriversDB.getId("drivers", "personal_id", personalId));
             System.out.println("id: " + drivers[i].getId());
@@ -81,9 +87,32 @@ public class TaxiManager {
             System.out.println("some thing were wrong...");
     }
 
-    private int createVehicleAndReturnId(String name, String color, String plaque) throws SQLException {
-        Vehicle vehicle = new Car(name, color, plaque);
-        accessToVehicleDB.addNewDriver(vehicle);
+    public TypeOfVehicle chooseTypeOfVehicle() {
+        TypeOfVehicle typeOfVehicle = null;
+        System.out.print("which vehicle you have? (1.car 2.van 3.motorcycle) : ");
+        int chosenTypeOfVehicle = scanner.nextInt();
+        switch (chosenTypeOfVehicle) {
+            case 1:
+                typeOfVehicle = TypeOfVehicle.CAR;
+                break;
+
+            case 2:
+                typeOfVehicle = TypeOfVehicle.VAN;
+                break;
+
+            case 3:
+                typeOfVehicle = TypeOfVehicle.MOTORCYCLE;
+                break;
+
+            default:
+                Main.printInvalidInput();
+        }
+        return typeOfVehicle;
+    }
+
+    private int createVehicleAndReturnId(String name, String color, String plaque, TypeOfVehicle typeOfVehicle) throws SQLException {
+        Vehicle vehicle = new Vehicle(name, color, plaque, typeOfVehicle);
+        accessToVehicleDB.addNewVehicle(vehicle);
         vehicle.setId(accessToVehicleDB.getId("vehicles", "plaque", plaque));
         return vehicle.getId();
     }
@@ -137,13 +166,11 @@ public class TaxiManager {
 
         while (true) {
             try {
-                System.out.print("gender(f/m): ");
-                gender = scanner.nextLine();
-                if (!gender.equals("m") && !gender.equals("f"))
-                    throw new UserInputValidation("you must enter f or m...");
+                System.out.print("gender(female/male): ");
+                gender = Gender.valueOf(scanner.nextLine().toUpperCase());
                 break;
-            } catch (UserInputValidation e) {
-                System.out.println(e.getLocalizedMessage());
+            } catch (UserInputValidation | NullPointerException | IllegalArgumentException e) {
+                System.out.println("you must enter female or male...");
                 Thread.sleep(1000);
             }
         }

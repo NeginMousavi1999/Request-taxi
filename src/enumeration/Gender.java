@@ -3,18 +3,21 @@ package enumeration;
 /**
  * @author Negin Mousavi
  */
-public enum TypeOfVehicle {
-    CAR("car"),
-    MOTORCYCLE("motorcycle"),
-    VAN("van");
+public enum Gender {
+    MALE("m"),
+    FEMALE("f");
 
     String abbr;
 
-    TypeOfVehicle(String abbr) {
+    Gender(String abbr) {
         this.abbr = abbr;
     }
 
     public String getAbbr() {
         return abbr;
+    }
+
+    public void setAbbr(String abbr) {
+        this.abbr = abbr;
     }
 }

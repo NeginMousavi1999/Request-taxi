@@ -57,7 +57,7 @@ public abstract class AccessToDB {
         return null;
     }
 
-    public User createUser(ResultSet resultSet) throws SQLException { //TODO must delete
+    public User createUser(ResultSet resultSet) throws SQLException { //TODO chikaresh konam
         return null;
     }
 }

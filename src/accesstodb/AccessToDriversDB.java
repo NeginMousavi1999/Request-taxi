@@ -1,5 +1,6 @@
 package accesstodb;
 
+import enumeration.Gender;
 import enumeration.TypeOfVehicle;
 import models.members.Driver;
 import models.members.User;
@@ -31,8 +32,8 @@ public class AccessToDriversDB extends AccessToDB {
     @Override
     public User createUser(ResultSet resultSet) throws SQLException {
         Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
-                resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
-                resultSet.getInt(4), TypeOfVehicle.CAR, resultSet.getInt(10));
+                resultSet.getString(3), Gender.valueOf(resultSet.getString(5).toUpperCase()), resultSet.getString(6),
+                resultSet.getInt(4), TypeOfVehicle.valueOf(resultSet.getString(9).toUpperCase()), resultSet.getInt(10));
         driver.setId(resultSet.getInt(1));
         return driver;
     }
@@ -45,11 +46,11 @@ public class AccessToDriversDB extends AccessToDB {
             statement.setString(1, driver.getFirstName());
             statement.setString(2, driver.getLastName());
             statement.setInt(3, driver.getBirthYear());
-            statement.setString(4, driver.getGender());
+            statement.setString(4, driver.getGender().toString().toLowerCase());
             statement.setString(5, driver.getPhoneNumber());
             statement.setString(6, driver.getPersonalId());
             statement.setBoolean(7, driver.isTripStatus());
-            statement.setString(8, String.valueOf(driver.getTypeOfVehicle()).toLowerCase());
+            statement.setString(8, driver.getTypeOfVehicle().toString().toLowerCase());
             statement.setInt(9, driver.getVehicleId());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0)

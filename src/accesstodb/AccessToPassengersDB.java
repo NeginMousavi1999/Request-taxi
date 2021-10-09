@@ -1,5 +1,6 @@
 package accesstodb;
 
+import enumeration.Gender;
 import models.members.Passenger;
 import models.members.User;
 
@@ -23,7 +24,7 @@ public class AccessToPassengersDB extends AccessToDB {
             statement.setString(1, passenger.getFirstName());
             statement.setString(2, passenger.getLastName());
             statement.setInt(3, passenger.getBirthYear());
-            statement.setString(4, passenger.getGender());
+            statement.setString(4, passenger.getGender().toString().toLowerCase());
             statement.setString(5, passenger.getPhoneNumber());
             statement.setString(6, passenger.getPersonalId());
             statement.setBoolean(7, passenger.isTripStatus());
@@ -50,7 +51,7 @@ public class AccessToPassengersDB extends AccessToDB {
     @Override
     public User createUser(ResultSet resultSet) throws SQLException {
         Passenger passenger = new Passenger(resultSet.getString(7), resultSet.getString(2),
-                resultSet.getString(3), resultSet.getString(5), resultSet.getString(6),
+                resultSet.getString(3), Gender.valueOf(resultSet.getString(5).toUpperCase()), resultSet.getString(6),
                 resultSet.getInt(4), resultSet.getDouble(9));
         passenger.setId(resultSet.getInt(1));
         return passenger;

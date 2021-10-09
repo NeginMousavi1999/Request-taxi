@@ -1,5 +1,6 @@
 package models.members;
 
+import enumeration.Gender;
 import lombok.Data;
 
 /**
@@ -11,13 +12,13 @@ public abstract class User {
     protected String personalId;
     protected String firstName;
     protected String lastName;
-    protected String gender;//TODO 1. enum
+    protected Gender gender;//TODO 1. enum
     protected String phoneNumber;
     protected int birthYear;
     protected int age;
     protected boolean tripStatus;
 
-    public User(String personalId, String firstName, String lastName, String gender, String phoneNumber, int birthYear) {
+    public User(String personalId, String firstName, String lastName, Gender gender, String phoneNumber, int birthYear) {
         this.personalId = personalId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -34,5 +35,15 @@ public abstract class User {
     }
 
     @Override
-    public abstract String toString();
+    public String toString() {
+        return "id=" + id +
+                ", personalId='" + personalId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender.toString().toLowerCase() +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthYear=" + birthYear +
+                ", age=" + age +
+                ", tripStatus=" + tripStatus + '\'';
+    }
 }
