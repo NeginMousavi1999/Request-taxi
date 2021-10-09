@@ -11,7 +11,7 @@ public abstract class User {
     protected String personalId;
     protected String firstName;
     protected String lastName;
-    protected String gender;//TODO enum
+    protected String gender;//TODO 1. enum
     protected String phoneNumber;
     protected int birthYear;
     protected int age;

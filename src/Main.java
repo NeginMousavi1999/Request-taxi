@@ -6,8 +6,8 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException, InterruptedException {
-        TaxiManager taxiManager = new TaxiManager();
         Scanner scanner = new Scanner(System.in);
+        TaxiManager taxiManager = new TaxiManager();
         welcome();
         int choice;
 
