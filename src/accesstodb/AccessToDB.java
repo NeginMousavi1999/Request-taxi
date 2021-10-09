@@ -44,11 +44,11 @@ public abstract class AccessToDB {
 
     public abstract void showAllObjectsInDB() throws SQLException;
 
-    public User returnUserIfExistsByPersonalId(String tableName, String columnName, String personalId) throws SQLException {
+    public User returnUserIfExists(String tableName, String columnName, String value) throws SQLException {
         if (connection != null) {
             String sql = String.format("SELECT * FROM %s WHERE %s = ?;", tableName, columnName);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, personalId);
+            statement.setString(1, value);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return createUser(resultSet);
