@@ -23,14 +23,14 @@ public class AccessToDriversDB extends AccessToDB {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM drivers");
             while (resultSet.next()) {
-                User driver = createUser(resultSet);
+                User driver = createObject(resultSet);
                 System.out.println(driver.toString());
             }
         }
     }
 
     @Override
-    public User createUser(ResultSet resultSet) throws SQLException {
+    public User createObject(ResultSet resultSet) throws SQLException {
         Driver driver = new Driver(resultSet.getString(7), resultSet.getString(2),
                 resultSet.getString(3), Gender.valueOf(resultSet.getString(5).toUpperCase()), resultSet.getString(6),
                 resultSet.getInt(4), TypeOfVehicle.valueOf(resultSet.getString(9).toUpperCase()), resultSet.getInt(10));

@@ -9,6 +9,7 @@ import enumeration.TypeOfVehicle;
 public class Driver extends User {
     private int vehicleId;
     private TypeOfVehicle typeOfVehicle;
+    private String location;//TODO
 
     public Driver(String personalId, String firstName, String lastName, Gender gender, String phoneNumber, int birthYear, TypeOfVehicle typeOfVehicle, int vehicleId) {
         super(personalId, firstName, lastName, gender, phoneNumber, birthYear);
@@ -22,6 +23,10 @@ public class Driver extends User {
 
     public TypeOfVehicle getTypeOfVehicle() {
         return typeOfVehicle;
+    }
+
+    public void acceptTrip() {
+
     }
 
     @Override

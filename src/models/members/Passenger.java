@@ -21,6 +21,10 @@ public class Passenger extends User {
         return accountBalance += amount;
     }
 
+    public void requestTrip() {
+
+    }
+
     @Override
     public String toString() {
         String s = "Passenger{" +

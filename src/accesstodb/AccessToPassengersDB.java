@@ -42,14 +42,14 @@ public class AccessToPassengersDB extends AccessToDB {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM passengers");
             while (resultSet.next()) {
-                User passenger = createUser(resultSet);
+                User passenger = createObject(resultSet);
                 System.out.println(passenger.toString());
             }
         }
     }
 
     @Override
-    public User createUser(ResultSet resultSet) throws SQLException {
+    public User createObject(ResultSet resultSet) throws SQLException {
         Passenger passenger = new Passenger(resultSet.getString(7), resultSet.getString(2),
                 resultSet.getString(3), Gender.valueOf(resultSet.getString(5).toUpperCase()), resultSet.getString(6),
                 resultSet.getInt(4), resultSet.getDouble(9));

@@ -12,7 +12,7 @@ public abstract class User {
     protected String personalId;
     protected String firstName;
     protected String lastName;
-    protected Gender gender;//TODO 1. enum
+    protected Gender gender;
     protected String phoneNumber;
     protected int birthYear;
     protected int age;

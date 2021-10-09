@@ -207,7 +207,7 @@ public class TaxiManager {
     }
 
     public static void handleExceptionForPlaqueFormat(String input) {
-        String regex = "[0-9][0-9][a-z][0-9][0-9]";
+        String regex = "[0-9]{2}[a-z][0-9]{2}";
         if (!Pattern.matches(regex, input))
             throw new UserInputValidation("the format of plauqe must be like: 99x99");
     }
@@ -227,20 +227,52 @@ public class TaxiManager {
             User driver = accessToDriversDB.returnUserIfExists("drivers", inputPersonalId);
             if (driver == null)
                 registerOrExit("d");
-            else
-                System.out.println("you are authenticate");
+            else {
+                System.out.print("you are authenticated ");
+                if (!driver.isTripStatus())
+                    System.out.println("and waiting for the trip");
+                else {
+
+                }
+            }
 
         } else if (caseNum == 4) {
             User passenger = accessToPassengersDB.returnUserIfExists("passengers", inputPersonalId);
             if (passenger == null)
                 registerOrExit("p");
             else {
-                showPassengerLoginMenu((Passenger) passenger);
+                if (!passenger.isTripStatus())
+                    showPassengerLoginMenu((Passenger) passenger);
+                else {
+
+                }
+
             }
         }
-        scanner.nextLine();
     }
 
+    public void showTripDetails() {
+
+    }
+
+    public void OptionsForDriverWhileTraveling() {
+        System.out.print("1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
+        int chosenOption = scanner.nextInt();
+        switch (chosenOption) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                Main.printInvalidInput();
+        }
+    }
+
+    public void confirmTravelFinished() {
+
+    }
     public void registerOrExit(String userType) throws SQLException, InterruptedException {
         System.out.print("1)register\n2)exit\nwhat do you wanna do? : ");
         int answer = scanner.nextInt();
@@ -252,6 +284,7 @@ public class TaxiManager {
                     createDriver(3);
                 break;
             case 2:
+                scanner.nextLine();
                 break;
             default:
                 Main.printInvalidInput();
@@ -259,21 +292,29 @@ public class TaxiManager {
     }
 
     public void showPassengerLoginMenu(Passenger passenger) throws SQLException {
-        System.out.print("you are authenticate\n1)Increase account balance\n2)Exit\nwhat do you wanna do? : ");
+        System.out.print("you are authenticate\n1)Travel request (cash payment)\n2.Travel request (payment from account balance)\n" +
+                "3.Increase account balance\n4)Exit\nwhat do you wanna do? : ");
         int answer = scanner.nextInt();
         switch (answer) {
             case 1:
+
+                break;
+
+            case 2:
+                break;
+
+            case 3:
                 System.out.print("enter amount to increase: ");
                 double amount = scanner.nextDouble();
                 double newAccountBalance = passenger.increaseAccountBalance(amount);
                 accessToPassengersDB.updateAccountBalance(newAccountBalance, passenger.getId());
                 break;
-            case 2:
+
+            case 4:
                 break;
+
             default:
                 Main.printInvalidInput();
         }
     }
 }
-// TODO 2. try catch ro kholase konam
-//
