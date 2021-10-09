@@ -320,7 +320,7 @@ public class TaxiManager {
                 } else
                     paymentMethod = PaymentMethod.CASH;
                 Trip trip = new Trip(passenger.getId(), origin, destination, cost, paymentMethod);
-//                accessToTripDB.requestTrip(trip);
+                accessToTripDB.requestTrip(trip);
                 break;
 
             } else if (answer == 3) {

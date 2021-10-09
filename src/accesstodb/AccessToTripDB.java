@@ -24,7 +24,7 @@ public class AccessToTripDB extends AccessToDB {
 
     public int requestTrip(Trip trip) throws SQLException {
         if (connection != null) {
-            String sql = "INSERT INTO `taxi-agency`.`trips` (`passenger_id_fk`, `origin`, `destination`, `cost`, `payment_method` VALUES (?,?,?,?,?);";
+            String sql = "INSERT INTO `taxi-agency`.`trips` (`passenger_id_fk`, `origin`, `destination`, `cost`, `payment_method`) VALUES (?,?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, trip.getPassengerId());
             statement.setString(2, trip.getOrigin());
