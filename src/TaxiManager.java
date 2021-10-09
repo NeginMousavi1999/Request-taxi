@@ -1,12 +1,15 @@
 import accesstodb.AccessToDriversDB;
 import accesstodb.AccessToPassengersDB;
+import accesstodb.AccessToTripDB;
 import accesstodb.AccessToVehicleDB;
 import enumeration.Gender;
+import enumeration.PaymentMethod;
 import enumeration.TypeOfVehicle;
 import exceptions.UserInputValidation;
 import models.members.Driver;
 import models.members.Passenger;
 import models.members.User;
+import models.trip.Trip;
 import models.vehicles.Vehicle;
 
 import java.sql.SQLException;
@@ -21,9 +24,12 @@ public class TaxiManager {
     AccessToPassengersDB accessToPassengersDB = new AccessToPassengersDB();
     AccessToDriversDB accessToDriversDB = new AccessToDriversDB();
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
+    AccessToTripDB accessToTripDB = new AccessToTripDB();
     private String fName, lName, personalId, phoneNum;
-    private int birthYear, vehicleId;
+    private int birthYear, cost;
     Gender gender;
+    PaymentMethod paymentMethod;
+    String origin, destination;
 
     public TaxiManager() throws SQLException, ClassNotFoundException {
     }
@@ -62,6 +68,7 @@ public class TaxiManager {
             }
 
             TypeOfVehicle typeOfVehicle;
+            int vehicleId;
             if (isVehiclePlaqueExists(vehiclePlaque)) {
                 System.out.println("you can choose this vehicle plaque because it is exits already...");
                 return;
@@ -273,6 +280,7 @@ public class TaxiManager {
     public void confirmTravelFinished() {
 
     }
+
     public void registerOrExit(String userType) throws SQLException, InterruptedException {
         System.out.print("1)register\n2)exit\nwhat do you wanna do? : ");
         int answer = scanner.nextInt();
@@ -292,29 +300,58 @@ public class TaxiManager {
     }
 
     public void showPassengerLoginMenu(Passenger passenger) throws SQLException {
-        System.out.print("you are authenticate\n1)Travel request (cash payment)\n2.Travel request (payment from account balance)\n" +
-                "3.Increase account balance\n4)Exit\nwhat do you wanna do? : ");
-        int answer = scanner.nextInt();
-        switch (answer) {
-            case 1:
+        while (true) {
+            System.out.print("you are authenticate\n1)Travel request (cash payment)\n2.Travel request (payment from account balance)\n" +
+                    "3.Increase account balance\n4)Exit\nwhat do you wanna do? : ");
+            int answer = scanner.nextInt();
+            if (answer == 1 || answer == 2) {
+                int cost = setOriginAndDestinationAndReturnCost();
+                System.out.println("cost is: " + cost);
+                if (answer == 2) {
+                    if (cost > passenger.getAccountBalance()) {
+                        System.out.print("the cost is more than account balance. do you wanna choose something else?(y or n): ");
+                        String showAgainOrCancel = scanner.nextLine();
+                        if (!showAgainOrCancel.equals("y"))
+                            break;
+                        else continue;
 
+                    }
+                    paymentMethod = PaymentMethod.ACCOUNT_BALANCE;
+                } else
+                    paymentMethod = PaymentMethod.CASH;
+                Trip trip = new Trip(passenger.getId(), origin, destination, cost, paymentMethod);
+//                accessToTripDB.requestTrip(trip);
                 break;
 
-            case 2:
-                break;
-
-            case 3:
+            } else if (answer == 3) {
                 System.out.print("enter amount to increase: ");
                 double amount = scanner.nextDouble();
                 double newAccountBalance = passenger.increaseAccountBalance(amount);
                 accessToPassengersDB.updateAccountBalance(newAccountBalance, passenger.getId());
                 break;
 
-            case 4:
+            } else if (answer == 4)
                 break;
 
-            default:
+            else
                 Main.printInvalidInput();
         }
+    }
+
+    public int setOriginAndDestinationAndReturnCost() {
+        scanner.nextLine();
+        System.out.print("enter coordinates of origin(split with ',' ): ");
+        origin = scanner.nextLine();
+        System.out.print("enter coordinates of destination(split with ',' ): ");
+        destination = scanner.nextLine();
+        int xO = Integer.parseInt(origin.split(",")[0]);
+        int yO = Integer.parseInt(origin.split(",")[1]);
+        int xD = Integer.parseInt(destination.split(",")[0]);
+        int yD = Integer.parseInt(destination.split(",")[1]);
+        int a = xD - xO;
+        int b = yD - yO;
+        int space = (int) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+        cost = space * 1000;
+        return cost;
     }
 }

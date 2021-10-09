@@ -17,8 +17,7 @@ public class Trip {
     private double cost;
     private PaymentMethod paymentMethod;
 
-    public Trip(int driverId, int passengerId, String origin, String destination, double cost, PaymentMethod paymentMethod) {
-        this.driverId = driverId;
+    public Trip(int passengerId, String origin, String destination, double cost, PaymentMethod paymentMethod) {
         this.passengerId = passengerId;
         this.origin = origin;
         this.destination = destination;

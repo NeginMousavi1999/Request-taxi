@@ -51,13 +51,13 @@ public abstract class AccessToDB {
             statement.setString(1, personalId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return createObject(resultSet);
+                return createUser(resultSet);
             }
         }
         return null;
     }
 
-    public User createObject(ResultSet resultSet) throws SQLException { //TODO chikaresh konam
+    public User createUser(ResultSet resultSet) throws SQLException { //TODO chikaresh konam
         return null;
     }
 }
