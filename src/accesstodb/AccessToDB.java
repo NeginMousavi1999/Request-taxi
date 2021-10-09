@@ -1,5 +1,7 @@
 package accesstodb;
 
+import models.members.Driver;
+import models.members.Passenger;
 import models.members.User;
 
 import java.sql.*;
@@ -60,4 +62,7 @@ public abstract class AccessToDB {
     public User createUser(ResultSet resultSet) throws SQLException { //TODO chikaresh konam
         return null;
     }
+
+    public abstract void updateTripStatus(Object object, boolean status) throws SQLException;
+
 }

@@ -3,6 +3,7 @@ package accesstodb;
 import enumeration.Gender;
 import models.members.Passenger;
 import models.members.User;
+import models.trip.Trip;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,6 +56,18 @@ public class AccessToPassengersDB extends AccessToDB {
                 resultSet.getInt(4), resultSet.getDouble(9));
         passenger.setId(resultSet.getInt(1));
         return passenger;
+    }
+
+    @Override
+    public void updateTripStatus(Object object, boolean status) throws SQLException {
+        Passenger passenger = (Passenger) object;
+        if (connection != null) {
+            String sql = "UPDATE passengers SET status = ? WHERE id = ?;";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBoolean(1, status);
+            statement.setInt(1, passenger.getId());
+            statement.executeQuery();
+        }
     }
 
     public void updateAccountBalance(double value, int id) throws SQLException {

@@ -13,6 +13,7 @@ import models.trip.Trip;
 import models.vehicles.Vehicle;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -26,7 +27,7 @@ public class TaxiManager {
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
     AccessToTripDB accessToTripDB = new AccessToTripDB();
     private String fName, lName, personalId, phoneNum;
-    private int birthYear, cost;
+    private int birthYear;
     Gender gender;
     PaymentMethod paymentMethod;
     String origin, destination;
@@ -231,7 +232,7 @@ public class TaxiManager {
         System.out.print("enter your Personal Id: ");
         String inputPersonalId = scanner.nextLine();
         if (caseNum == 3) {
-            User driver = accessToDriversDB.returnUserIfExists("drivers", inputPersonalId);
+            User driver = accessToDriversDB.returnUserIfExists("drivers", "personal_id", inputPersonalId);
             if (driver == null)
                 registerOrExit("d");
             else {
@@ -244,13 +245,13 @@ public class TaxiManager {
             }
 
         } else if (caseNum == 4) {
-            User passenger = accessToPassengersDB.returnUserIfExists("passengers", inputPersonalId);
+            User passenger = accessToPassengersDB.returnUserIfExists("passengers", "personal_id", inputPersonalId);
             if (passenger == null)
                 registerOrExit("p");
             else {
                 if (!passenger.isTripStatus())
                     showPassengerLoginMenu((Passenger) passenger);
-                else {
+                else {//TODO
 
                 }
 
@@ -299,7 +300,7 @@ public class TaxiManager {
         }
     }
 
-    public void showPassengerLoginMenu(Passenger passenger) throws SQLException {
+    public void showPassengerLoginMenu(Passenger passenger) throws SQLException, InterruptedException {
         while (true) {
             System.out.print("you are authenticate\n1)Travel request (cash payment)\n2.Travel request (payment from account balance)\n" +
                     "3.Increase account balance\n4)Exit\nwhat do you wanna do? : ");
@@ -319,8 +320,18 @@ public class TaxiManager {
                     paymentMethod = PaymentMethod.ACCOUNT_BALANCE;
                 } else
                     paymentMethod = PaymentMethod.CASH;
+
                 Trip trip = new Trip(passenger.getId(), origin, destination, cost, paymentMethod);
-                accessToTripDB.requestTrip(trip);
+                System.out.println("wait until driver accept....");
+                Thread.sleep(3000);
+                Driver accDriver = findNearestDriverByPersonalId();
+                trip.setDriverId(accDriver.getId());
+                
+                accessToDriversDB.updateTripStatus(accDriver, true);
+                accessToPassengersDB.updateTripStatus(passenger, true);
+                accessToTripDB.updateTripStatus(trip, true);
+
+                accessToTripDB.addNewTrip(trip);
                 break;
 
             } else if (answer == 3) {
@@ -344,14 +355,34 @@ public class TaxiManager {
         origin = scanner.nextLine();
         System.out.print("enter coordinates of destination(split with ',' ): ");
         destination = scanner.nextLine();
-        int xO = Integer.parseInt(origin.split(",")[0]);
-        int yO = Integer.parseInt(origin.split(",")[1]);
-        int xD = Integer.parseInt(destination.split(",")[0]);
-        int yD = Integer.parseInt(destination.split(",")[1]);
-        int a = xD - xO;
-        int b = yD - yO;
-        int space = (int) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-        cost = space * 1000;
+        int cost = calculateTheDistanceBetweenTwoPoints(origin, destination) * 1000;
         return cost;
+    }
+
+    public int calculateTheDistanceBetweenTwoPoints(String a, String b) {
+        int space;
+        int xO = Integer.parseInt(a.split(",")[0]);
+        int yO = Integer.parseInt(a.split(",")[1]);
+        int xD = Integer.parseInt(b.split(",")[0]);
+        int yD = Integer.parseInt(b.split(",")[1]);
+        int c = xD - xO;
+        int d = yD - yO;
+        space = (int) Math.sqrt(Math.pow(c, 2) + Math.pow(d, 2));
+        return space;
+    }
+
+    public Driver findNearestDriverByPersonalId() throws SQLException {
+        List<String> locations = accessToDriversDB.findLocation();
+        int min = Integer.MAX_VALUE;
+        String dLocation = null;
+        for (String location : locations) {
+            int space = calculateTheDistanceBetweenTwoPoints(location, origin);
+            if(space < min) {
+                min = space;
+                dLocation = location;
+            }
+        }
+        User driver = accessToDriversDB.returnUserIfExists("drivers", "location", dLocation);
+        return (Driver) driver;
     }
 }
