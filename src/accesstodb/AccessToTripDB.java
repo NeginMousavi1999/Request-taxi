@@ -69,4 +69,18 @@ public class AccessToTripDB extends AccessToDB {
             statement.executeUpdate();
         }
     }
+
+    public Trip findTripByDriverId(int driverId) throws SQLException {
+        Trip trip = null;
+        if (connection != null) {
+            String sql = "SELECT * FROM trips where status = \"on_trip\" and driver_id_fk = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, driverId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                trip = createTrip(resultSet);
+            }
+        }
+        return trip;
+    }
 }

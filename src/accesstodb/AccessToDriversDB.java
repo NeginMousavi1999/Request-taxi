@@ -90,4 +90,14 @@ public class AccessToDriversDB extends AccessToDB {
         }
         return locations;
     }
+
+    public void updateDriverLocation(Driver driver, String location) throws SQLException {
+        if (connection != null) {
+            String sql = "UPDATE drivers SET location = ? WHERE id = ?;";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, location);
+            statement.setInt(2, driver.getId());
+            statement.executeUpdate();
+        }
+    }
 }

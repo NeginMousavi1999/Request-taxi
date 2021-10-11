@@ -262,15 +262,15 @@ public class TaxiManager {
                     System.out.println("and waiting for acceptation");
                 else if (status.equals(UserStatus.ON_TRIP.toString())) {
                     System.out.println("you are on a trip");//TODO show trip
-                    showTripDetails();
+//                    showTripDetailsForSpecificPassenger((Passenger) passenger);
                 }
             }
         }
     }
 
-    public void showTripDetails() {
+/*    public void showTripDetailsForSpecificPassenger(Passenger passenger) {
 
-    }
+    }*/
 
     public void showAllOngoingTravels() throws SQLException {
         List<Trip> allTrips = accessToTripDB.showAllTrips();
@@ -302,23 +302,45 @@ public class TaxiManager {
         }
     }
 
-    public void showOptionsForDriverWhileTraveling(Driver driver) {
-        System.out.print("1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
-        int chosenOption = scanner.nextInt();
-        switch (chosenOption) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-                Main.printInvalidInput();
-        }
-    }
+    public void showOptionsForDriverWhileTraveling(Driver driver) throws SQLException {
+        boolean confirmCashReceipt = false;
+        int chosenOption;
+        Trip driverTrip = accessToTripDB.findTripByDriverId(driver.getId());
+        PaymentMethod paymentMethod = driverTrip.getPaymentMethod();
+        do {
+            System.out.print("1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
+            chosenOption = scanner.nextInt();
+            switch (chosenOption) {
+                case 1:
+                    if (paymentMethod.equals(PaymentMethod.ACCOUNT_BALANCE))
+                        System.out.println("This passenger has paid with account balance! you can finish the trip");
+                    else {
+                        confirmCashReceipt = true;
+                        System.out.println("Thank you for confirmation :) you can finish the trip");
+                    }
+                    continue;
+                case 2:
+                    if (paymentMethod.equals(PaymentMethod.CASH) && !confirmCashReceipt) {
+                        System.out.println("you must confirm cash receipt, then you can finished the trip");
+                        continue;
+                    } else {
+                        Passenger passenger = (Passenger) accessToPassengersDB.returnUserById("passengers", driverTrip.getPassengerId());
+                        accessToPassengersDB.updateStatus(passenger, UserStatus.NO_REQUEST);
+                        accessToTripDB.updateStatus(driverTrip, TripStatus.FINISHED);
 
-    public void confirmTravelFinished() {
+                        accessToDriversDB.updateStatus(driver, UserStatus.NO_REQUEST);
+                        accessToDriversDB.updateDriverLocation(driver, driverTrip.getDestination());
+                        System.out.println("your trip has ended... have a good time");
 
+                    }
+                    break;
+
+                case 3:
+                    break;
+                default:
+                    Main.printInvalidInput();
+            }
+        } while (chosenOption != 3);
     }
 
     public void registerOrExit(String userType) throws SQLException, InterruptedException {
