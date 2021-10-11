@@ -4,7 +4,6 @@ import enumeration.Gender;
 import enumeration.UserStatus;
 import models.members.Passenger;
 import models.members.User;
-import models.trip.Trip;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

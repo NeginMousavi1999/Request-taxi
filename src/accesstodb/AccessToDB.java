@@ -1,7 +1,5 @@
 package accesstodb;
 
-import models.members.Driver;
-import models.members.Passenger;
 import models.members.User;
 
 import java.sql.*;
@@ -60,6 +58,19 @@ public abstract class AccessToDB {
     }
 
     public User createUser(ResultSet resultSet) throws SQLException { //TODO chikaresh konam
+        return null;
+    }
+
+    public User returnUserById(String tableName, int id) throws SQLException {
+        if (connection != null) {
+            String sql = String.format("SELECT * FROM %s WHERE id = ?;", tableName);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return createUser(resultSet);
+            }
+        }
         return null;
     }
 }

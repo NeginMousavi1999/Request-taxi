@@ -272,8 +272,19 @@ public class TaxiManager {
 
     }
 
-    public void showAllTrips() {
-
+    public void showAllOngoingTravels() throws SQLException {
+        List<Trip> allTrips = accessToTripDB.showAllTrips();
+        for (Trip trip : allTrips) {
+            if (trip.getTripStatus().equals(TripStatus.ON_TRIP)) {
+                Passenger passenger = (Passenger) accessToPassengersDB.returnUserById("passengers", trip.getPassengerId());
+                Driver driver = (Driver) accessToDriversDB.returnUserById("drivers", trip.getDriverId());
+                System.out.println("information about trip:");
+                System.out.println(passenger.toString());
+                System.out.println(driver.toString());
+                System.out.println("Origin: " + trip.getOrigin() + "\nDestination" + trip.getDestination());
+                Main.printStar();
+            }
+        }
     }
 
     public void showOptionsForDriverWithNoRequest(Driver driver) throws SQLException {

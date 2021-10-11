@@ -1,11 +1,15 @@
 package accesstodb;
 
+import enumeration.PaymentMethod;
 import enumeration.TripStatus;
 import models.trip.Trip;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Negin Mousavi
@@ -19,8 +23,25 @@ public class AccessToTripDB extends AccessToDB {
 
     }
 
+    public List<Trip> showAllTrips() throws SQLException {
+        List<Trip> trips = new ArrayList<>();
+        if (connection != null) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM trips");
+            while (resultSet.next()) {
+                Trip trip = createTrip(resultSet);
+                trips.add(trip);
+            }
+        }
+        return trips;
+    }
+
     public Trip createTrip(ResultSet resultSet) throws SQLException {
-        return null;
+        Trip trip = new Trip(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4),
+                resultSet.getString(5), resultSet.getDouble(6),
+                PaymentMethod.valueOf(resultSet.getString(7).toUpperCase()),
+                TripStatus.valueOf(resultSet.getString(8).toUpperCase()));
+        return trip;
     }
 
     public void addNewTrip(Trip trip) throws SQLException {

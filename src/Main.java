@@ -46,8 +46,8 @@ public class Main {
                     printStar();
                     break;
 
-                case 5://TODO show all the TRIPS
-                    taxiManager.showAllTrips();
+                case 5:
+                    taxiManager.showAllOngoingTravels();
                     printStar();
                     break;
 
