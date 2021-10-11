@@ -46,8 +46,8 @@ public class Main {
                     printStar();
                     break;
 
-                case 5:
-                    System.out.println("this is not for this Project phase");
+                case 5://TODO show all the TRIPS
+                    taxiManager.showAllTrips();
                     printStar();
                     break;
 

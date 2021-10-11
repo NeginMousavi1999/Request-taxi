@@ -2,9 +2,7 @@ import accesstodb.AccessToDriversDB;
 import accesstodb.AccessToPassengersDB;
 import accesstodb.AccessToTripDB;
 import accesstodb.AccessToVehicleDB;
-import enumeration.Gender;
-import enumeration.PaymentMethod;
-import enumeration.TypeOfVehicle;
+import enumeration.*;
 import exceptions.UserInputValidation;
 import models.members.Driver;
 import models.members.Passenger;
@@ -55,6 +53,9 @@ public class TaxiManager {
             }
             scanner.nextLine();
 
+            System.out.print("enter your location(x,y): ");
+            String location = scanner.nextLine();
+
             String vehiclePlaque = null;
             while (true) {
                 try {
@@ -84,7 +85,7 @@ public class TaxiManager {
                 String color = scanner.nextLine();
                 vehicleId = createVehicleAndReturnId(name, color, vehiclePlaque, typeOfVehicle);
             }
-            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, typeOfVehicle, vehicleId);
+            drivers[i] = new Driver(personalId, fName, lName, gender, phoneNum, birthYear, typeOfVehicle, vehicleId, location);
             addedSuc += accessToDriversDB.addNewDriver(drivers[i]);
             drivers[i].setId(accessToDriversDB.getId("drivers", "personal_id", personalId));
             System.out.println("id: " + drivers[i].getId());
@@ -236,11 +237,16 @@ public class TaxiManager {
             if (driver == null)
                 registerOrExit("d");
             else {
-                System.out.print("you are authenticated ");
-                if (!driver.isTripStatus())
+                System.out.println("you are authenticated ");
+                String status = driver.getUserStatus().toString();
+                if (status.equals(UserStatus.WAITING.toString()))
                     System.out.println("and waiting for the trip");
-                else {
+                else if (status.equals(UserStatus.NO_REQUEST.toString())) {
+                    showOptionsForDriverWithNoRequest((Driver) driver);
+                    scanner.nextLine();
 
+                } else if (status.equals(UserStatus.ON_TRIP.toString())) {
+                    showOptionsForDriverWhileTraveling((Driver) driver);
                 }
             }
 
@@ -249,12 +255,15 @@ public class TaxiManager {
             if (passenger == null)
                 registerOrExit("p");
             else {
-                if (!passenger.isTripStatus())
+                String status = passenger.getUserStatus().toString();
+                if (status.equals(UserStatus.NO_REQUEST.toString()))
                     showPassengerLoginMenu((Passenger) passenger);
-                else {//TODO
-
+                else if (status.equals(UserStatus.WAITING.toString()))
+                    System.out.println("and waiting for acceptation");
+                else if (status.equals(UserStatus.ON_TRIP.toString())) {
+                    System.out.println("you are on a trip");//TODO show trip
+                    showTripDetails();
                 }
-
             }
         }
     }
@@ -263,7 +272,26 @@ public class TaxiManager {
 
     }
 
-    public void OptionsForDriverWhileTraveling() {
+    public void showAllTrips() {
+
+    }
+
+    public void showOptionsForDriverWithNoRequest(Driver driver) throws SQLException {
+        System.out.println("1.accept a trip\n2.Exit");
+        int chosenOption = scanner.nextInt();
+        switch (chosenOption) {
+            case 1:
+                driver.setUserStatus(UserStatus.WAITING);
+                accessToDriversDB.updateStatus(driver, driver.getUserStatus());
+                break;
+            case 2:
+                break;
+            default:
+                Main.printInvalidInput();
+        }
+    }
+
+    public void showOptionsForDriverWhileTraveling(Driver driver) {
         System.out.print("1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
         int chosenOption = scanner.nextInt();
         switch (chosenOption) {
@@ -326,11 +354,10 @@ public class TaxiManager {
                 Thread.sleep(3000);
                 Driver accDriver = findNearestDriverByPersonalId();
                 trip.setDriverId(accDriver.getId());
-                
-                accessToDriversDB.updateTripStatus(accDriver, true);
-                accessToPassengersDB.updateTripStatus(passenger, true);
-                accessToTripDB.updateTripStatus(trip, true);
+                System.out.println("your request is accepted by: " + accDriver.getFirstName() + " " + accDriver.getLastName());
 
+                accessToDriversDB.updateStatus(accDriver, UserStatus.ON_TRIP);
+                accessToPassengersDB.updateStatus(passenger, UserStatus.ON_TRIP);
                 accessToTripDB.addNewTrip(trip);
                 break;
 
@@ -355,8 +382,7 @@ public class TaxiManager {
         origin = scanner.nextLine();
         System.out.print("enter coordinates of destination(split with ',' ): ");
         destination = scanner.nextLine();
-        int cost = calculateTheDistanceBetweenTwoPoints(origin, destination) * 1000;
-        return cost;
+        return calculateTheDistanceBetweenTwoPoints(origin, destination) * 1000;
     }
 
     public int calculateTheDistanceBetweenTwoPoints(String a, String b) {
@@ -372,12 +398,12 @@ public class TaxiManager {
     }
 
     public Driver findNearestDriverByPersonalId() throws SQLException {
-        List<String> locations = accessToDriversDB.findLocation();
+        List<String> locations = accessToDriversDB.findLocationOfWaitingStatus();
         int min = Integer.MAX_VALUE;
         String dLocation = null;
         for (String location : locations) {
             int space = calculateTheDistanceBetweenTwoPoints(location, origin);
-            if(space < min) {
+            if (space < min) {
                 min = space;
                 dLocation = location;
             }

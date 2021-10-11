@@ -1,6 +1,7 @@
 package models.trip;
 
 import enumeration.PaymentMethod;
+import enumeration.TripStatus;
 import lombok.Data;
 
 /**
@@ -16,7 +17,7 @@ public class Trip {
     private String destination;
     private double cost;
     private PaymentMethod paymentMethod;
-    private boolean status;
+    private TripStatus tripStatus;
 
     public Trip(int passengerId, String origin, String destination, double cost, PaymentMethod paymentMethod) {
         this.passengerId = passengerId;
@@ -24,5 +25,6 @@ public class Trip {
         this.destination = destination;
         this.cost = cost;
         this.paymentMethod = paymentMethod;
+        this.tripStatus = TripStatus.ON_TRIP;
     }
 }

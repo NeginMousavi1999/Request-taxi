@@ -1,7 +1,6 @@
 package accesstodb;
 
-import models.members.Driver;
-import models.members.Passenger;
+import enumeration.TripStatus;
 import models.trip.Trip;
 
 import java.sql.PreparedStatement;
@@ -26,8 +25,8 @@ public class AccessToTripDB extends AccessToDB {
 
     public void addNewTrip(Trip trip) throws SQLException {
         if (connection != null) {
-            String sql = "INSERT INTO `taxi-agency`.`trips` (`passenger_id_fk`, `origin`, `destination`, `cost`, `payment_method`, `driver_id_fk`)" +
-                    " VALUES (?,?,?,?,?,?);";
+            String sql = "INSERT INTO `taxi-agency`.`trips` (`passenger_id_fk`, `origin`, `destination`, `cost`, `payment_method`, `driver_id_fk`," +
+                    " `status`) VALUES (?,?,?,?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, trip.getPassengerId());
             statement.setString(2, trip.getOrigin());
@@ -35,20 +34,18 @@ public class AccessToTripDB extends AccessToDB {
             statement.setInt(4, (int) trip.getCost());
             statement.setString(5, trip.getPaymentMethod().toString().toLowerCase());
             statement.setInt(6, trip.getDriverId());
-            int rowsInserted = statement.executeUpdate();
+            statement.setString(7, "on_trip");
+            statement.executeUpdate();
         }
     }
 
-    @Override
-    public void updateTripStatus(Object object, boolean status) throws SQLException {
-        Trip trip = (Trip) object;
+    public void updateStatus(Trip trip, TripStatus tripStatus) throws SQLException {
         if (connection != null) {
-            String sql = "UPDATE trip SET status = ? WHERE id = ?;";
+            String sql = "UPDATE trips SET status = ? WHERE id = ?;";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, status);
-            statement.setInt(1, trip.getId());
-            statement.executeQuery();
+            statement.setString(1, tripStatus.toString().toLowerCase());
+            statement.setInt(2, trip.getId());
+            statement.executeUpdate();
         }
     }
 }
-

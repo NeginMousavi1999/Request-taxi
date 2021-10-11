@@ -1,6 +1,7 @@
 package accesstodb;
 
 import enumeration.Gender;
+import enumeration.UserStatus;
 import models.members.Passenger;
 import models.members.User;
 import models.trip.Trip;
@@ -28,7 +29,7 @@ public class AccessToPassengersDB extends AccessToDB {
             statement.setString(4, passenger.getGender().toString().toLowerCase());
             statement.setString(5, passenger.getPhoneNumber());
             statement.setString(6, passenger.getPersonalId());
-            statement.setBoolean(7, passenger.isTripStatus());
+            statement.setString(7, passenger.getUserStatus().toString().toLowerCase());
             statement.setDouble(8, passenger.getAccountBalance());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0)
@@ -55,18 +56,17 @@ public class AccessToPassengersDB extends AccessToDB {
                 resultSet.getString(3), Gender.valueOf(resultSet.getString(5).toUpperCase()), resultSet.getString(6),
                 resultSet.getInt(4), resultSet.getDouble(9));
         passenger.setId(resultSet.getInt(1));
+        passenger.setUserStatus(UserStatus.valueOf(resultSet.getString(8).toUpperCase()));
         return passenger;
     }
 
-    @Override
-    public void updateTripStatus(Object object, boolean status) throws SQLException {
-        Passenger passenger = (Passenger) object;
+    public void updateStatus(Passenger passenger, UserStatus userStatus) throws SQLException {
         if (connection != null) {
             String sql = "UPDATE passengers SET status = ? WHERE id = ?;";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, status);
-            statement.setInt(1, passenger.getId());
-            statement.executeQuery();
+            statement.setString(1, userStatus.toString().toLowerCase());
+            statement.setInt(2, passenger.getId());
+            statement.executeUpdate();
         }
     }
 

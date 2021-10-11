@@ -17,11 +17,6 @@ public class AccessToVehicleDB extends AccessToDB {
 
     }
 
-    @Override
-    public void updateTripStatus(Object object, boolean status) throws SQLException {
-
-    }
-
     public int addNewVehicle(Vehicle vehicle) throws SQLException {
         if (connection != null) {
             String sql = "INSERT INTO `taxi-agency`.`vehicles` (`type`, `name`, `color`, `plaque`) VALUES (?,?,?,?);";

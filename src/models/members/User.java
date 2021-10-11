@@ -1,6 +1,7 @@
 package models.members;
 
 import enumeration.Gender;
+import enumeration.UserStatus;
 import lombok.Data;
 
 /**
@@ -16,7 +17,7 @@ public abstract class User {
     protected String phoneNumber;
     protected int birthYear;
     protected int age;
-    protected boolean tripStatus;
+    protected UserStatus userStatus;
 
     public User(String personalId, String firstName, String lastName, Gender gender, String phoneNumber, int birthYear) {
         this.personalId = personalId;
@@ -25,7 +26,7 @@ public abstract class User {
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.birthYear = birthYear;
-        tripStatus = false;
+        userStatus = UserStatus.NO_REQUEST;
         age = calculateAge(1400);
     }
 
@@ -44,6 +45,6 @@ public abstract class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", birthYear=" + birthYear +
                 ", age=" + age +
-                ", tripStatus=" + tripStatus + '\'';
+                ", tripStatus=" + userStatus.toString().toLowerCase() + '\'';
     }
 }

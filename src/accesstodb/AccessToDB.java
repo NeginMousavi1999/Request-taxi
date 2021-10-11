@@ -62,7 +62,4 @@ public abstract class AccessToDB {
     public User createUser(ResultSet resultSet) throws SQLException { //TODO chikaresh konam
         return null;
     }
-
-    public abstract void updateTripStatus(Object object, boolean status) throws SQLException;
-
 }
