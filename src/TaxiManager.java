@@ -288,7 +288,7 @@ public class TaxiManager {
     }
 
     public void showOptionsForDriverWithNoRequest(Driver driver) throws SQLException {
-        System.out.println("1.accept a trip\n2.Exit");
+        System.out.println("1.accept a trip\n2.Exit\nwhat do you wanna do? : ");
         int chosenOption = scanner.nextInt();
         switch (chosenOption) {
             case 1:
@@ -308,7 +308,7 @@ public class TaxiManager {
         Trip driverTrip = accessToTripDB.findTripByDriverId(driver.getId());
         PaymentMethod paymentMethod = driverTrip.getPaymentMethod();
         do {
-            System.out.print("1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
+            System.out.print("and you are on a trip\n1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
             chosenOption = scanner.nextInt();
             switch (chosenOption) {
                 case 1:
@@ -368,6 +368,8 @@ public class TaxiManager {
             int answer = scanner.nextInt();
             if (answer == 1 || answer == 2) {
                 int cost = setOriginAndDestinationAndReturnCost();
+                if (cost == -1)
+                    return;
                 System.out.println("cost is: " + cost);
                 if (answer == 2) {
                     if (cost > passenger.getAccountBalance()) {
@@ -411,11 +413,16 @@ public class TaxiManager {
 
     public int setOriginAndDestinationAndReturnCost() {
         scanner.nextLine();
-        System.out.print("enter coordinates of origin(split with ',' ): ");
-        origin = scanner.nextLine();
-        System.out.print("enter coordinates of destination(split with ',' ): ");
-        destination = scanner.nextLine();
-        return calculateTheDistanceBetweenTwoPoints(origin, destination) * 1000;
+        try {
+            System.out.print("enter coordinates of origin(split with ',' ): ");
+            origin = scanner.nextLine();
+            System.out.print("enter coordinates of destination(split with ',' ): ");
+            destination = scanner.nextLine();
+            return calculateTheDistanceBetweenTwoPoints(origin, destination) * 1000;
+        } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
+            Main.printInvalidInput();
+            return -1;
+        }
     }
 
     public int calculateTheDistanceBetweenTwoPoints(String a, String b) {
