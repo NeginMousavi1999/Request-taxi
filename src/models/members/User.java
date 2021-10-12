@@ -1,7 +1,7 @@
 package models.members;
 
-import enumeration.Gender;
-import enumeration.UserStatus;
+import enumerations.Gender;
+import enumerations.UserStatus;
 import lombok.Data;
 
 /**

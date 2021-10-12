@@ -1,11 +1,10 @@
 package accesstodb;
 
-import enumeration.Gender;
-import enumeration.TypeOfVehicle;
-import enumeration.UserStatus;
+import enumerations.Gender;
+import enumerations.TypeOfVehicle;
+import enumerations.UserStatus;
 import models.members.Driver;
 import models.members.User;
-import models.trip.Trip;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,7 +1,7 @@
 package models.members;
 
-import enumeration.Gender;
-import enumeration.TypeOfVehicle;
+import enumerations.Gender;
+import enumerations.TypeOfVehicle;
 import lombok.Data;
 
 /**

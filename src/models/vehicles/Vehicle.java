@@ -1,6 +1,6 @@
 package models.vehicles;
 
-import enumeration.TypeOfVehicle;
+import enumerations.TypeOfVehicle;
 import lombok.Data;
 
 /**

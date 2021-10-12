@@ -1,6 +1,6 @@
 package models.members;
 
-import enumeration.Gender;
+import enumerations.Gender;
 
 /**
  * @author Negin Mousavi

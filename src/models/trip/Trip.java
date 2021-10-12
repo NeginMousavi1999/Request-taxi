@@ -1,7 +1,7 @@
 package models.trip;
 
-import enumeration.PaymentMethod;
-import enumeration.TripStatus;
+import enumerations.PaymentMethod;
+import enumerations.TripStatus;
 import lombok.Data;
 
 /**

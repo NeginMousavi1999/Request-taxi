@@ -2,7 +2,7 @@ import accesstodb.AccessToDriversDB;
 import accesstodb.AccessToPassengersDB;
 import accesstodb.AccessToTripDB;
 import accesstodb.AccessToVehicleDB;
-import enumeration.*;
+import enumerations.*;
 import exceptions.UserInputValidation;
 import models.members.Driver;
 import models.members.Passenger;

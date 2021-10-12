@@ -1,7 +1,7 @@
 package accesstodb;
 
-import enumeration.Gender;
-import enumeration.UserStatus;
+import enumerations.Gender;
+import enumerations.UserStatus;
 import models.members.Passenger;
 import models.members.User;
 

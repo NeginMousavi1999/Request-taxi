@@ -1,7 +1,7 @@
 package accesstodb;
 
-import enumeration.PaymentMethod;
-import enumeration.TripStatus;
+import enumerations.PaymentMethod;
+import enumerations.TripStatus;
 import models.trip.Trip;
 
 import java.sql.PreparedStatement;
