@@ -1,4 +1,4 @@
-package accesstodb;
+package dao;
 
 import models.members.User;
 

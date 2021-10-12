@@ -1,4 +1,4 @@
-package accesstodb;
+package dao;
 
 import enumerations.PaymentMethod;
 import enumerations.TripStatus;

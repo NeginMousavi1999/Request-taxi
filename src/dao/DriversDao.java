@@ -1,4 +1,4 @@
-package accesstodb;
+package dao;
 
 import enumerations.Gender;
 import enumerations.TypeOfVehicle;
@@ -16,8 +16,8 @@ import java.util.List;
 /**
  * @author Negin Mousavi
  */
-public class AccessToDriversDB extends AccessToDB {
-    public AccessToDriversDB() throws ClassNotFoundException, SQLException {
+public class DriversDao extends AccessToDB {
+    public DriversDao() throws ClassNotFoundException, SQLException {
     }
 
     @Override

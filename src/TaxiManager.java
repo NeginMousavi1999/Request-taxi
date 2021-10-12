@@ -1,7 +1,7 @@
-import accesstodb.AccessToDriversDB;
-import accesstodb.AccessToPassengersDB;
-import accesstodb.AccessToTripDB;
-import accesstodb.AccessToVehicleDB;
+import dao.DriversDao;
+import dao.AccessToPassengersDB;
+import dao.AccessToTripDB;
+import dao.AccessToVehicleDB;
 import enumerations.*;
 import exceptions.UserInputValidation;
 import models.members.Driver;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class TaxiManager {
     Scanner scanner = new Scanner(System.in);
     AccessToPassengersDB accessToPassengersDB = new AccessToPassengersDB();
-    AccessToDriversDB accessToDriversDB = new AccessToDriversDB();
+    DriversDao accessToDriversDB = new DriversDao();
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
     AccessToTripDB accessToTripDB = new AccessToTripDB();
     private String fName, lName, personalId, phoneNum;
