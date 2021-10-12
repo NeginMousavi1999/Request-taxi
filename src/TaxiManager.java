@@ -53,8 +53,18 @@ public class TaxiManager {
             }
             scanner.nextLine();
 
-            System.out.print("enter your location(x,y): ");
-            String location = scanner.nextLine();
+            String location;
+            do {
+                try {
+                    System.out.print("enter your location(x,y): ");
+                    location = scanner.nextLine();
+                    if (location.split(",").length != 2)
+                        throw new ArrayIndexOutOfBoundsException();
+                    break;
+                } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
+                    Main.printInvalidInput();
+                }
+            } while (true);
 
             String vehiclePlaque = null;
             while (true) {
@@ -218,7 +228,7 @@ public class TaxiManager {
     public static void handleExceptionForPlaqueFormat(String input) {
         String regex = "[0-9]{2}[a-z][0-9]{2}";
         if (!Pattern.matches(regex, input))
-            throw new UserInputValidation("the format of plauqe must be like: 99x99");
+            throw new UserInputValidation("the format of plaque must be like: 99x99");
     }
 
     public void showAllPassengers() throws SQLException {
@@ -288,7 +298,7 @@ public class TaxiManager {
     }
 
     public void showOptionsForDriverWithNoRequest(Driver driver) throws SQLException {
-        System.out.println("1.accept a trip\n2.Exit\nwhat do you wanna do? : ");
+        System.out.print("1.accept a trip\n2.Exit\nwhat do you wanna do? : ");
         int chosenOption = scanner.nextInt();
         switch (chosenOption) {
             case 1:
@@ -306,7 +316,13 @@ public class TaxiManager {
         boolean confirmCashReceipt = false;
         int chosenOption;
         Trip driverTrip = accessToTripDB.findTripByDriverId(driver.getId());
-        PaymentMethod paymentMethod = driverTrip.getPaymentMethod();
+        PaymentMethod paymentMethod = null;
+        try {
+            paymentMethod = driverTrip.getPaymentMethod();
+        } catch (NullPointerException nullPointerException) {
+            System.out.println("something in your db is wrong! check the driver with name " + driver.getFirstName());
+            return;
+        }
         do {
             System.out.print("and you are on a trip\n1.Confirm cash receipt\n2.Travel finished\n3.Exit\nwhat do you wanna do? : ");
             chosenOption = scanner.nextInt();
