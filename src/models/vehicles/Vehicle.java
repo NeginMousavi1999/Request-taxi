@@ -2,7 +2,6 @@ package models.vehicles;
 
 import enumerations.TypeOfVehicle;
 import lombok.Data;
-
 /**
  * @author Negin Mousavi
  */
