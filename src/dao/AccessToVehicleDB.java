@@ -8,7 +8,7 @@ import java.sql.SQLException;
 /**
  * @author Negin Mousavi
  */
-public class AccessToVehicleDB extends AccessToDB {
+public class AccessToVehicleDB extends BaseDao {
     public AccessToVehicleDB() throws ClassNotFoundException, SQLException {
     }
 

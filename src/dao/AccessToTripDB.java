@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Negin Mousavi
  */
-public class AccessToTripDB extends AccessToDB {
+public class AccessToTripDB extends BaseDao {
     public AccessToTripDB() throws ClassNotFoundException, SQLException {
     }
 

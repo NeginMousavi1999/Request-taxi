@@ -13,7 +13,7 @@ import java.sql.Statement;
 /**
  * @author Negin Mousavi
  */
-public class AccessToPassengersDB extends AccessToDB {
+public class AccessToPassengersDB extends BaseDao {
     public AccessToPassengersDB() throws ClassNotFoundException, SQLException {
     }
 

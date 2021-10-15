@@ -7,10 +7,10 @@ import java.sql.*;
 /**
  * @author Negin Mousavi
  */
-public abstract class AccessToDB {
+public abstract class BaseDao {
     protected Connection connection;
 
-    public AccessToDB() throws ClassNotFoundException, SQLException {
+    public BaseDao() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/taxi-agency", "root", "123456");
     }
