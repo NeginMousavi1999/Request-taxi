@@ -66,7 +66,7 @@ public class TaxiManager {
                 }
             } while (true);
 
-            String vehiclePlaque = null;
+            String vehiclePlaque;
             while (true) {
                 try {
                     System.out.print("vehicle plaque: ");
@@ -316,7 +316,7 @@ public class TaxiManager {
         boolean confirmCashReceipt = false;
         int chosenOption;
         Trip driverTrip = tripDao.findTripByDriverId(driver.getId());
-        PaymentMethod paymentMethod = null;
+        PaymentMethod paymentMethod;
         try {
             paymentMethod = driverTrip.getPaymentMethod();
         } catch (NullPointerException nullPointerException) {

@@ -5,8 +5,8 @@ import java.util.Scanner;
  * @author Negin Mousavi
  */
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) throws SQLException, ClassNotFoundException, InterruptedException {
-        Scanner scanner = new Scanner(System.in);
         TaxiManager taxiManager = new TaxiManager();
         welcome();
         int choice;
@@ -91,4 +91,60 @@ public class Main {
                 "                                  __/ |                 __/ |\n" +
                 "                                 |___/                 |___/ ");
     }
+
+ /*   public static User returnUserWithCommonInfo() throws InterruptedException {
+        scanner.nextLine();
+        System.out.print("first name: ");
+        String fName = scanner.nextLine();
+
+        System.out.print("last name: ");
+        String lName = scanner.nextLine();
+
+        System.out.print("personal id: ");
+        String personalId = scanner.nextLine();
+
+        Gender gender;
+        while (true) {
+            try {
+                System.out.print("gender(female/male): ");
+                gender = Gender.valueOf(scanner.nextLine().toUpperCase());
+                break;
+            } catch (UserInputValidation | NullPointerException | IllegalArgumentException e) {
+                System.out.println("you must enter female or male...");
+                Thread.sleep(1000);
+            }
+        }
+
+        String phoneNum;
+        while (true) {
+            try {
+                System.out.print("phone number: ");
+                phoneNum = scanner.nextLine();
+                handleExceptionForMobileNumFormat(phoneNum);
+                break;
+            } catch (UserInputValidation e) {
+                System.out.println(e.getLocalizedMessage());
+                Thread.sleep(1000);
+            }
+        }
+
+        int birthYear;
+        while (true) {
+            System.out.print("birth year: ");
+            if (scanner.hasNextInt()) {
+                birthYear = scanner.nextInt();
+                break;
+            } else {
+                scanner.nextLine();
+                System.out.println("Enter a valid Integer value");
+                Thread.sleep(1000);
+            }
+        }
+        return new User(personalId, fName, lName, gender, phoneNum, birthYear);
+    }
+    public static void handleExceptionForMobileNumFormat(String input) {
+        String regex = "09[0-9]{9}";
+        if (!Pattern.matches(regex, input))
+            throw new UserInputValidation("some thing is not correct about this phone number");
+    }*/
 }

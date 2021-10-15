@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Negin Mousavi
  */
 @Data
-public abstract class User {
+public class User {
     protected int id;
     protected String personalId;
     protected String firstName;
