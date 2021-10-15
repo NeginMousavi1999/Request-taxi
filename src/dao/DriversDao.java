@@ -80,7 +80,6 @@ public class DriversDao extends UserDao {
         List<String> locations = new ArrayList<>();
         if (connection != null) {
             Statement statement = connection.createStatement();
-            String status = "waiting";
             String sql = "SELECT location FROM drivers WHERE status=\"waiting\";";
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {

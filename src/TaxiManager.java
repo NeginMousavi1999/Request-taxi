@@ -1,7 +1,7 @@
 import dao.DriversDao;
 import dao.PassengersDao;
-import dao.AccessToTripDB;
-import dao.AccessToVehicleDB;
+import dao.TripDao;
+import dao.VehicleDao;
 import enumerations.*;
 import exceptions.UserInputValidation;
 import models.members.Driver;
@@ -22,8 +22,8 @@ public class TaxiManager {
     Scanner scanner = new Scanner(System.in);
     PassengersDao passengersDao = new PassengersDao();
     DriversDao accessToDriversDB = new DriversDao();
-    AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
-    AccessToTripDB accessToTripDB = new AccessToTripDB();
+    VehicleDao vehicleDao = new VehicleDao();
+    TripDao tripDao = new TripDao();
     private String fName, lName, personalId, phoneNum;
     private int birthYear;
     Gender gender;
@@ -47,7 +47,7 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new driver **");
             getCommonInformationInputs();
-            if (accessToDriversDB.isObjectFound("drivers", "personal_id", personalId)) {
+            if (accessToDriversDB.isObjectFoundByColumnName("drivers", "personal_id", personalId)) {
                 System.out.println("you can't register, there is a driver with this personal id!");
                 return;
             }
@@ -131,13 +131,13 @@ public class TaxiManager {
 
     private int createVehicleAndReturnId(String name, String color, String plaque, TypeOfVehicle typeOfVehicle) throws SQLException {
         Vehicle vehicle = new Vehicle(name, color, plaque, typeOfVehicle);
-        accessToVehicleDB.addNewVehicle(vehicle);
-        vehicle.setId(accessToVehicleDB.getId("vehicles", "plaque", plaque));
+        vehicleDao.addNewVehicle(vehicle);
+        vehicle.setId(vehicleDao.getId("vehicles", "plaque", plaque));
         return vehicle.getId();
     }
 
     private boolean isVehiclePlaqueExists(String vehiclePlaque) throws SQLException {
-        return accessToDriversDB.isObjectFound("vehicles", "plaque", vehiclePlaque);
+        return accessToDriversDB.isObjectFoundByColumnName("vehicles", "plaque", vehiclePlaque);
     }
 
     public void createPassenger(int caseNum) throws SQLException, InterruptedException {
@@ -154,7 +154,7 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
             getCommonInformationInputs();
-            if (passengersDao.isObjectFound("passengers", "personal_id", personalId)) {
+            if (passengersDao.isObjectFoundByColumnName("passengers", "personal_id", personalId)) {
                 System.out.println("you can't register, there is a driver with this personal id!");
                 return;
             }
@@ -283,7 +283,7 @@ public class TaxiManager {
     }*/
 
     public void showAllOngoingTravels() throws SQLException {
-        List<Trip> allTrips = accessToTripDB.showAllTrips();
+        List<Trip> allTrips = tripDao.showAllTrips();
         for (Trip trip : allTrips) {
             if (trip.getTripStatus().equals(TripStatus.ON_TRIP)) {
                 Passenger passenger = (Passenger) passengersDao.returnUserById("passengers", trip.getPassengerId());
@@ -315,7 +315,7 @@ public class TaxiManager {
     public void showOptionsForDriverWhileTraveling(Driver driver) throws SQLException {
         boolean confirmCashReceipt = false;
         int chosenOption;
-        Trip driverTrip = accessToTripDB.findTripByDriverId(driver.getId());
+        Trip driverTrip = tripDao.findTripByDriverId(driver.getId());
         PaymentMethod paymentMethod = null;
         try {
             paymentMethod = driverTrip.getPaymentMethod();
@@ -342,7 +342,7 @@ public class TaxiManager {
                     } else {
                         Passenger passenger = (Passenger) passengersDao.returnUserById("passengers", driverTrip.getPassengerId());
                         passengersDao.updateStatus(passenger, UserStatus.NO_REQUEST);
-                        accessToTripDB.updateStatus(driverTrip, TripStatus.FINISHED);
+                        tripDao.updateStatus(driverTrip, TripStatus.FINISHED);
 
                         accessToDriversDB.updateStatus(driver, UserStatus.NO_REQUEST);
                         accessToDriversDB.updateDriverLocation(driver, driverTrip.getDestination());
@@ -409,7 +409,7 @@ public class TaxiManager {
 
                 accessToDriversDB.updateStatus(accDriver, UserStatus.ON_TRIP);
                 passengersDao.updateStatus(passenger, UserStatus.ON_TRIP);
-                accessToTripDB.addNewTrip(trip);
+                tripDao.addNewTrip(trip);
                 break;
 
             } else if (answer == 3) {

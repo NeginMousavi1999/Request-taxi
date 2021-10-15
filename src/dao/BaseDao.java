@@ -27,15 +27,13 @@ public abstract class BaseDao {
         return id;
     }
 
-    public boolean isObjectFound(String tableName, String columnName, String value) throws SQLException {
+    public boolean isObjectFoundByColumnName(String tableName, String columnName, String value) throws SQLException {
         if (connection != null) {
             String sql = String.format("SELECT * FROM %s WHERE %s = ?;", tableName, columnName);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, value);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
+            return resultSet.next();
         }
         return false;
     }

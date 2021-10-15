@@ -8,16 +8,16 @@ import java.sql.SQLException;
 /**
  * @author Negin Mousavi
  */
-public class AccessToVehicleDB extends BaseDao {
-    public AccessToVehicleDB() throws ClassNotFoundException, SQLException {
+public class VehicleDao extends BaseDao {
+    public VehicleDao() throws ClassNotFoundException, SQLException {
     }
 
     @Override
-    public void showAllObjectsInDB() throws SQLException {
+    public void showAllObjectsInDB() {
 
     }
 
-    public int addNewVehicle(Vehicle vehicle) throws SQLException {
+    public void addNewVehicle(Vehicle vehicle) throws SQLException {
         if (connection != null) {
             String sql = "INSERT INTO `taxi-agency`.`vehicles` (`type`, `name`, `color`, `plaque`) VALUES (?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -25,10 +25,7 @@ public class AccessToVehicleDB extends BaseDao {
             statement.setString(2, vehicle.getName());
             statement.setString(3, vehicle.getColor());
             statement.setString(4, vehicle.getPlaque());
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0)
-                return rowsInserted;
+            statement.executeUpdate();
         }
-        return 0;
     }
 }

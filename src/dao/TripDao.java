@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * @author Negin Mousavi
  */
-public class AccessToTripDB extends BaseDao {
-    public AccessToTripDB() throws ClassNotFoundException, SQLException {
+public class TripDao extends BaseDao {
+    public TripDao() throws ClassNotFoundException, SQLException {
     }
 
     @Override
@@ -37,11 +37,10 @@ public class AccessToTripDB extends BaseDao {
     }
 
     public Trip createTrip(ResultSet resultSet) throws SQLException {
-        Trip trip = new Trip(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4),
-                resultSet.getString(5), resultSet.getDouble(6),
+        return new Trip(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3),
+                resultSet.getString(4), resultSet.getString(5), resultSet.getDouble(6),
                 PaymentMethod.valueOf(resultSet.getString(7).toUpperCase()),
                 TripStatus.valueOf(resultSet.getString(8).toUpperCase()));
-        return trip;
     }
 
     public void addNewTrip(Trip trip) throws SQLException {
