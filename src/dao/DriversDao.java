@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author Negin Mousavi
  */
-public class DriversDao extends BaseDao {
+public class DriversDao extends UserDao {
     public DriversDao() throws ClassNotFoundException, SQLException {
     }
 

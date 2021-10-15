@@ -1,5 +1,5 @@
 import dao.DriversDao;
-import dao.AccessToPassengersDB;
+import dao.PassengersDao;
 import dao.AccessToTripDB;
 import dao.AccessToVehicleDB;
 import enumerations.*;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public class TaxiManager {
     Scanner scanner = new Scanner(System.in);
-    AccessToPassengersDB accessToPassengersDB = new AccessToPassengersDB();
+    PassengersDao passengersDao = new PassengersDao();
     DriversDao accessToDriversDB = new DriversDao();
     AccessToVehicleDB accessToVehicleDB = new AccessToVehicleDB();
     AccessToTripDB accessToTripDB = new AccessToTripDB();
@@ -154,7 +154,7 @@ public class TaxiManager {
         for (int i = 0; i < count; i++) {
             System.out.println("** information for new passenger **");
             getCommonInformationInputs();
-            if (accessToPassengersDB.isObjectFound("passengers", "personal_id", personalId)) {
+            if (passengersDao.isObjectFound("passengers", "personal_id", personalId)) {
                 System.out.println("you can't register, there is a driver with this personal id!");
                 return;
             }
@@ -162,8 +162,8 @@ public class TaxiManager {
             System.out.print("account balance: ");
             double accountBalance = scanner.nextDouble();
             passengers[i] = new Passenger(personalId, fName, lName, gender, phoneNum, birthYear, accountBalance);
-            addedSuc += accessToPassengersDB.addNewPassenger(passengers[i]);
-            passengers[i].setId(accessToPassengersDB.getId("passengers", "personal_id", personalId));
+            addedSuc += passengersDao.addNewPassenger(passengers[i]);
+            passengers[i].setId(passengersDao.getId("passengers", "personal_id", personalId));
             System.out.println("id: " + passengers[i].getId());
         }
         if (addedSuc == count)
@@ -232,7 +232,7 @@ public class TaxiManager {
     }
 
     public void showAllPassengers() throws SQLException {
-        accessToPassengersDB.showAllObjectsInDB();
+        passengersDao.showAllObjectsInDB();
     }
 
     public void showAllDrivers() throws SQLException {
@@ -261,7 +261,7 @@ public class TaxiManager {
             }
 
         } else if (caseNum == 4) {
-            User passenger = accessToPassengersDB.returnUserIfExists("passengers", "personal_id", inputPersonalId);
+            User passenger = passengersDao.returnUserIfExists("passengers", "personal_id", inputPersonalId);
             if (passenger == null)
                 registerOrExit("p");
             else {
@@ -286,7 +286,7 @@ public class TaxiManager {
         List<Trip> allTrips = accessToTripDB.showAllTrips();
         for (Trip trip : allTrips) {
             if (trip.getTripStatus().equals(TripStatus.ON_TRIP)) {
-                Passenger passenger = (Passenger) accessToPassengersDB.returnUserById("passengers", trip.getPassengerId());
+                Passenger passenger = (Passenger) passengersDao.returnUserById("passengers", trip.getPassengerId());
                 Driver driver = (Driver) accessToDriversDB.returnUserById("drivers", trip.getDriverId());
                 System.out.println("information about trip:");
                 System.out.println(passenger.toString());
@@ -340,8 +340,8 @@ public class TaxiManager {
                         System.out.println("you must confirm cash receipt, then you can finished the trip");
                         continue;
                     } else {
-                        Passenger passenger = (Passenger) accessToPassengersDB.returnUserById("passengers", driverTrip.getPassengerId());
-                        accessToPassengersDB.updateStatus(passenger, UserStatus.NO_REQUEST);
+                        Passenger passenger = (Passenger) passengersDao.returnUserById("passengers", driverTrip.getPassengerId());
+                        passengersDao.updateStatus(passenger, UserStatus.NO_REQUEST);
                         accessToTripDB.updateStatus(driverTrip, TripStatus.FINISHED);
 
                         accessToDriversDB.updateStatus(driver, UserStatus.NO_REQUEST);
@@ -408,7 +408,7 @@ public class TaxiManager {
                 System.out.println("your request is accepted by: " + accDriver.getFirstName() + " " + accDriver.getLastName());
 
                 accessToDriversDB.updateStatus(accDriver, UserStatus.ON_TRIP);
-                accessToPassengersDB.updateStatus(passenger, UserStatus.ON_TRIP);
+                passengersDao.updateStatus(passenger, UserStatus.ON_TRIP);
                 accessToTripDB.addNewTrip(trip);
                 break;
 
@@ -416,7 +416,7 @@ public class TaxiManager {
                 System.out.print("enter amount to increase: ");
                 double amount = scanner.nextDouble();
                 double newAccountBalance = passenger.increaseAccountBalance(amount);
-                accessToPassengersDB.updateAccountBalance(newAccountBalance, passenger.getId());
+                passengersDao.updateAccountBalance(newAccountBalance, passenger.getId());
                 break;
 
             } else if (answer == 4)
